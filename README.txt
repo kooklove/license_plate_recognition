@@ -8,9 +8,9 @@ How to setup.
 2. Git LFS : https://git-lfs.github.com/
 
 [Configuration]
-git config --global --user.name xxxxxx
-git config --global --user.email xxxxxx
+git config --global user.name xxxxxx
+git config --global user.email xxxxxx
 
 
 [Download Source]
-git clone https://github.com/git-lfs/git-lfs.git
+git clone https://github.com/kooklove/license_plate_recognition.git
