@@ -127,6 +127,9 @@
       <AdditionalLibraryDirectories>..\x64\Debug;..\opencv\build\x64\vc15\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opencv_world455d.lib;libtesseract-static.lib;ws2_32.lib;libopenalpr.lib;liblept-DLL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>$(ProjectDir)..\setup.bat</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -146,6 +149,9 @@
       <AdditionalLibraryDirectories>..\opencv\build\x64\vc15\lib;..\x64\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opencv_world455.lib;libopenalpr.lib;liblept-DLL.lib;libtesseract-static.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>$(ProjectDir)..\setup.bat</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\common\NetworkTCP.cpp" />

@@ -1,0 +1,1 @@
+tasklist /nh /fi "imagename eq server.exe" | find /i "server.exe" || %~dp0\x64\Release\server.exe
