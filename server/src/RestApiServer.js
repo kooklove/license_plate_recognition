@@ -1,5 +1,6 @@
 import express from 'express';
 import { apiPlate } from './apiPlate.js';
+import { apiPlateFaked } from './apiPlateFaked.js';
 // import { createRequire } from "module";
 // const require = createRequire(import.meta.url);
 import morgan from 'morgan';
@@ -22,6 +23,10 @@ export default class RestApiServer {
     app.use(morgan('dev'));
     app.use(express.json());
     app.use(express.urlencoded({ extended: false }));
+
+    app.post('/plateFaked', (req, res) => {
+      return apiPlateFaked(req, res)
+    });
 
     app.post('/plate', (req, res) => {
       return apiPlate(req, res)

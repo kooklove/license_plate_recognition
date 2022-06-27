@@ -1,6 +1,7 @@
 import { WebcamComponent } from './Webcam'
 import { AccordionItem, AccordionHeader, AccordionBody, UncontrolledAccordion } from 'reactstrap';
 import { RestApiComponent } from './RestApi';
+// import VideoPreviewComponent from './VideoPreview';
 
 export const UnitTest = () => {
   return (
@@ -24,6 +25,14 @@ export const UnitTest = () => {
               <RestApiComponent />
             </AccordionBody>
           </AccordionItem>
+          {/* <AccordionItem>
+            <AccordionHeader targetId="3">
+              Video Preview
+            </AccordionHeader>
+            <AccordionBody accordionId="3">
+              <VideoPreviewComponent showDetail={true} />
+            </AccordionBody>
+          </AccordionItem> */}
         </UncontrolledAccordion>
       </div>
     </>
