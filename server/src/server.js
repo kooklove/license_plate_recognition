@@ -15,9 +15,9 @@ function getTLSOption() {
     const dir = path.resolve(__dirname, '../cert/');
     console.log('[TLS] Cert/keys from ' + dir);
     options = {
-      ca: fs.readFileSync(path.resolve(dir, 'fullchain.pem')),
-      key: fs.readFileSync(path.resolve(dir, 'privkey.pem')),
-      cert: fs.readFileSync(path.resolve(dir, 'cert.pem'))
+      ca: fs.readFileSync(path.resolve(dir, 'server.csr')),
+      key: fs.readFileSync(path.resolve(dir, 'server.key')),
+      cert: fs.readFileSync(path.resolve(dir, 'server.crt'))
     };
   } catch (err) {
     console.log("failed to get TLS options");

@@ -22,7 +22,7 @@ export const UnitTest = () => {
               REST API
             </AccordionHeader>
             <AccordionBody accordionId="2">
-              <RestApiComponent />
+              <RestApiComponent protocol="https" port={3503}/>
             </AccordionBody>
           </AccordionItem>
           {/* <AccordionItem>
