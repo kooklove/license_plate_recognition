@@ -2,6 +2,7 @@ import './App.css';
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import { Button } from 'reactstrap';
 import { RestApiComponent } from 'unittest/RestApi';
+import { WebsocketHandler} from 'unittest/WsHandler'
 
 function App() {
   const handle = useFullScreenHandle();
@@ -15,6 +16,7 @@ function App() {
 
       <FullScreen handle={handle}>
         <RestApiComponent protocol="https:" port={3503} />
+        <WebsocketHandler/>
       </FullScreen>
     </div>
   );
