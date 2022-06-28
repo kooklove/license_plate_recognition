@@ -25,7 +25,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "starthttps": "set HTTPS=true&&react-scripts start",
-    "lgesw1": "cd C:\\Program Files\\Google\\Chrome\\Application\\ && chrome --kiosk --app=http://localhost:3000",
+    "lgesw1": "cd C:\\Program Files\\Google\\Chrome\\Application\\ && chrome --kiosk  --start-fullscreen --app=http://localhost:3000",
     "lgesw2": "chrome --kiosk --app=http://localhost:3000"
   },
   "eslintConfig": {

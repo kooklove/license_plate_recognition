@@ -2,7 +2,7 @@
 ### LGE Software Architect 2002 Studio Project Team 4 Server
 
 ## Create DB (only once at the very beginning)
-1. Install MariaDB - Root ID/PW for root:root. Update DATABASE_URL for prisma in .env if you change root:root.
+1. Install MariaDB(10.6.x) - Root ID/PW for root:root. Update DATABASE_URL for prisma in .env if you change root:root.
 2. Launch MariaDB MySQL Client and create database:
     create database lgeswa2022
 3. Create tables using prisma commands:

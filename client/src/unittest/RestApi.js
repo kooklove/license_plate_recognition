@@ -1,12 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Badge, Button, Card, CardBody, CardImg, CardTitle, CardSubtitle, CardText, Input, InputGroup, Spinner, UncontrolledAlert, Row, Col } from 'reactstrap';
+import { Badge, Button, Card, CardBody, CardImg, CardTitle, CardSubtitle, Input, InputGroup, Spinner, UncontrolledAlert, Row, Col } from 'reactstrap';
+import logo from 'assets/logo.png';
 
 export const RestApiComponent = (props) => {
-  const [protocol,] = useState(props.protocol || 'http:');
+  const [protocol,] = useState(props.protocol || 'https:');
   const [host,] = useState(props.host || 'localhost');
-  const [port,] = useState(props.port || 3502);
+  const [port,] = useState(props.port || 3503);
 
   const [msgSent, setMsgSent] = useState(undefined);
   const [msgReceived, setMsgReceived] = useState(undefined);
@@ -39,19 +40,14 @@ export const RestApiComponent = (props) => {
         break;
     }
     setFound(m);
-  }, msgReceived);
-
-  useEffect(() => {
-    console.log("found", found);
-  }, found);
+  }, [msgReceived]);
 
   const getCard = m => {
-    console.log("getCard()");
     return (
       <Card style={{ width: '100%', border: '10px solid rgba(255,255,255,0.1)' }} color={m.status === "No Wants/Warrants" ? 'black' : 'red'}>
         <CardImg
           alt="car image"
-          src="https://picsum.photos/318/180"
+          src={logo}
           top
           width="100%"
           height="100px"
@@ -66,7 +62,7 @@ export const RestApiComponent = (props) => {
           >
             {m.status}
           </CardSubtitle>
-          <CardText>
+          <div>
             <Row>
               <Col xs='6'>Registration:</Col>
               <Col> {m.registration}</Col>
@@ -107,8 +103,9 @@ export const RestApiComponent = (props) => {
               <Col xs='6'>vehicleColor:</Col>
               <Col> {m.vehicleColor}</Col>
             </Row>
-          </CardText>
-          <Button color="primary" onClick={() => setFound(undefined)}>
+          </div>
+          <hr />
+          <Button color="secondary" onClick={() => setFound(undefined)}>
             CLOSE
           </Button>
         </CardBody>
@@ -137,31 +134,34 @@ export const RestApiComponent = (props) => {
       });
   }
 
-  return (<div>
-    <Badge color="primary" style={{ marginBottom: '1em' }}>Assuming a plate number is found from ALPR</Badge>
-    <InputGroup style={{ width: '300px' }}>
-      <Input type="textfield" defaultValue={detectedCarNum} onChange={e => setDetectedCarNum(e.target.value)} />
-      <Button onClick={() => postPlateNumber(detectedCarNum)}>Send to server</Button>
-    </InputGroup>
+  return (
+    <div style={{ padding: '3em' }}>
+      <Badge color="primary" style={{ marginBottom: '1em' }}>Assuming a plate number is found from ALPR</Badge>
+      <p style={{ fontSize: '0.8em' }}>Try LKY1360 or HHF6697</p>
+      <InputGroup style={{ width: '300px' }}>
+        <Input type="textfield" defaultValue={detectedCarNum} onChange={e => setDetectedCarNum(e.target.value)} />
+        <Button onClick={() => postPlateNumber(detectedCarNum)}>Send to server</Button>
+      </InputGroup>
 
-    <div style={{ marginTop: '1em', fontSize: '0.8em' }}>
-      <p>{msgSent}</p>
-      {ongoing ?
-        <p><Spinner /> Waiting for server response...</p> :
-        <p>Received: {msgReceived}</p>
+      <div style={{ marginTop: '1em', fontSize: '0.8em' }}>
+        <div style={{ marginBottom: '1em', color: 'blue' }}>{msgSent}</div>
+        {ongoing ?
+          <div><Spinner /> Waiting for server response...</div> :
+          <div>Received: {msgReceived}</div>
+        }
+      </div>
+
+      <div style={{ position: 'fixed', top: '10%', right: '20%', margin: 'auto', width: '500px', zIndex: 2 }}>
+        {found && getCard(found)}
+      </div>
+
+      {alert &&
+        <div style={{ position: 'fixed', bottom: 0, width: '100vw', zIndex: 4 }}>
+          <UncontrolledAlert color="danger">
+            {alert}
+          </UncontrolledAlert>
+        </div>
       }
     </div>
-
-    <div style={{ position: 'fixed', top: '10%', right: '20%', margin: 'auto', width: '500px', zIndex: 2 }}>
-      {found && getCard(found)}
-    </div>
-
-    {alert &&
-      <div style={{ position: 'fixed', bottom: 0, width: '100vw', zIndex: 4 }}>
-        <UncontrolledAlert color="danger">
-          {alert}
-        </UncontrolledAlert>
-      </div>
-    }
-  </div>);
+  );
 }
