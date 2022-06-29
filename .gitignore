@@ -1,1 +1,4 @@
 /certs
+/doxygen
+.idea/
+../.idea/
