@@ -1,4 +1,4 @@
 /certs
 /doxygen
-.idea/
-../.idea/
+**/.idea/
+**/package-lock.json
