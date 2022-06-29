@@ -1,7 +1,6 @@
 -- CreateTable
 CREATE TABLE `User` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `email` VARCHAR(191) NOT NULL,
     `name` VARCHAR(191) NULL,
 
@@ -14,9 +13,9 @@ CREATE TABLE `PlateNumber` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `plate` VARCHAR(30) NOT NULL,
     `status` VARCHAR(30) NOT NULL,
-    `registration` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `registration` INTEGER NOT NULL,
     `ownerName` VARCHAR(50) NOT NULL,
-    `ownerBirth` DATETIME(3) NOT NULL,
+    `ownerBirth` INTEGER NOT NULL,
     `ownerAddress` VARCHAR(255) NOT NULL,
     `ownerCity` VARCHAR(150) NOT NULL,
     `vehicleYear` INTEGER NOT NULL,
