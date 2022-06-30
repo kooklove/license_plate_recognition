@@ -1,38 +1,39 @@
-const db = require("../models");
-const ROLES = db.ROLES;
-const User = db.user;
+const prisma = require("../../prisma/prisma");
+const config = require("../config/auth.config");
+const Users = prisma.users;
+const Roles = prisma.roles;
 
 checkDuplicateUsernameOrEmail = (req, res, next) => {
   // Username
-  User.findOne({
+  Users.findUnique({
     where: {
       username: req.body.username
     }
   }).then(user => {
+    console.log(user)
     if (user) {
       res.status(400).send({
         message: "Failed! Username is already in use!"
-      });
-      return;
+      })
+      return
     }
 
-    // Email
-    User.findOne({
-      where: {
-        email: req.body.email
-      }
-    }).then(user => {
-      if (user) {
-        res.status(400).send({
-          message: "Failed! Email is already in use!"
-        });
-        return;
-      }
-
-      next();
-    });
-  });
-};
+    // // Email
+    // Users.findUnique({
+    //   where: {
+    //     email: req.body.email
+    //   }
+    // }).then(user => {
+    //   if (user) {
+    //     res.status(400).send({
+    //       message: "Failed! Email is already in use!"
+    //     });
+    //     return;
+    //   }
+    // });
+    next()
+  })
+}
 
 checkRolesExisted = (req, res, next) => {
   if (req.body.roles) {
@@ -45,7 +46,6 @@ checkRolesExisted = (req, res, next) => {
       }
     }
   }
-  
   next();
 };
 
