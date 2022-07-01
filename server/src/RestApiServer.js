@@ -1,5 +1,5 @@
 import express from 'express';
-import { apiPlate } from './apiPlate.js';
+import { apiPlate, apiPlatePartial } from './apiPlate.js';
 import { apiPlateFaked } from './apiPlateFaked.js';
 // import { createRequire } from "module";
 // const require = createRequire(import.meta.url);
@@ -30,6 +30,10 @@ export default class RestApiServer {
 
     app.post('/plate', (req, res) => {
       return apiPlate(req, res)
+    });
+
+    app.post('/platePartial', (req, res) => {
+      return apiPlatePartial(req, res)
     });
 
     const httpServer = http.createServer(app);

@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 
 const prisma = new PrismaClient()
 const SKIP_DATA_NUM = 0;
+const CREATE_MANY_NUM = 200000;
 
 async function main() {
     //var array = fs.readFileSync('D:/SW_Architect/disk1.gsd', 'utf-8').toString().split(["$"]);
@@ -81,7 +82,7 @@ async function main() {
                 }
 
                 
-                if(arr.length == 200000){
+                if(arr.length == CREATE_MANY_NUM){
                     console.log('prisma.plateNumber.createMany: '+ cnt);
                     let r = await prisma.plateNumber.createMany({
                         data: arr});
@@ -113,7 +114,7 @@ async function main() {
                     });
                 }
 
-                if(arr.length == 200000){
+                if(arr.length == CREATE_MANY_NUM){
                     console.log('prisma.plateNumber.createMany: '+ cnt);
                     let r = await prisma.plateNumber.createMany({
                         data: arr});
