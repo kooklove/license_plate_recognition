@@ -14,6 +14,7 @@ export const Preview = (props) => {
   const [datauri, setDatauri] = useState(undefined);
   const [video, setVideo] = useState('beaver1');
   const [baseDir, setBaseDir] = useState('F:\\22_SWARCH_PROJECT\\');
+  const [isPlaying, setIsPlaying] = useState(false);
   const [log, setLog] = useState(undefined);
 
   useEffect(() => {
@@ -32,7 +33,12 @@ export const Preview = (props) => {
       }
       ws.onmessage = message => {
         const m = JSON.parse(message.data);
-        setDatauri("data:image/jpeg;base64," + m.data);
+        if ('JPEG' in m) {
+          const img = "data:image/jpeg;base64," + m.JPEG;
+          setDatauri(img);
+        } else if ('PLATE' in m) {
+          console.log("TBD plate");
+        }
       };
     }
     connect();
@@ -44,10 +50,15 @@ export const Preview = (props) => {
 
   const getUrl = () => { return protocol + '//' + host + ':' + port }
 
-  const getRequest = () => { return "FILE:" + baseDir + video };
+  const sendRequest = () => {
+    const s = JSON.stringify({ request: isPlaying ? 'stop' : 'start', filepath: isPlaying ? undefined : ("FILE:" + baseDir + video) });
+    setIsPlaying(!isPlaying);
+    ws.send(s);
+    setLog("Send a request to ALPR: " + s);
+  }
 
-  const sendInitiate = () => {
-    const s = JSON.stringify({ request: '<start>', data: getRequest() })
+  const sendStop = () => {
+    const s = JSON.stringify({ request: 'stop' })
     ws.send(s);
     setLog("Send a request to ALPR: " + s);
   }
@@ -126,7 +137,7 @@ export const Preview = (props) => {
             <option value='beaver3'>Beaver3</option>
             <option value='beaver4'>Beaver4</option>
           </Input>
-          <Button onClick={() => sendInitiate()} color="primary">Play</Button>
+          <Button onClick={() => sendRequest()} color="primary">{isPlaying ? 'Cancel' : 'Play'}</Button>
         </InputGroup>
         {props.showDetail &&
           <><p style={{ marginTop: '1em', fontSize: "0.8em" }}>{log && log}</p>
