@@ -1,6 +1,6 @@
 How to setup.
 
-[Register]
+[Register ]
 1. GitHub : https://github.com
 
 [Install]
