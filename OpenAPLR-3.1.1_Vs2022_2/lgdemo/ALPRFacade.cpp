@@ -160,6 +160,8 @@ void ALPRFacade::detect(void (*pCallback)(int cmd, const std::string&s)) {
 
     // Closes all the frames
     //destroyAllWindows();
+#define CMD_FINISHED 3
+    pCallback(CMD_FINISHED,"");
 }
 
 void ALPRFacade::InitCounter()

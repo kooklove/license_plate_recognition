@@ -87,6 +87,7 @@ void CSimpleHttpServer::WebSocketClosed(const char* pszClientIp, int iClientPort
 }
 #define CMD_JPEGIMG 1
 #define CMD_PLATE 2
+#define CMD_FINISHED 3
 
 void CSimpleHttpServer::SendImageToFrontEnd(int cmd, const std::string& s)
 {
@@ -102,6 +103,11 @@ void CSimpleHttpServer::SendImageToFrontEnd(int cmd, const std::string& s)
 	else if (cmd == CMD_PLATE) {
 
 		clsObject.InsertData("PLATE", s);
+		clsObject.ToString(strOutput);
+	}
+	else if (cmd == CMD_FINISHED) {
+
+		clsObject.InsertData("status","finished");
 		clsObject.ToString(strOutput);
 	}
 	else
