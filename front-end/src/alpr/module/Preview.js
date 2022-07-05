@@ -1,8 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
-import { Badge, Button, Row, Col, FormGroup, Label, Input, InputGroup, InputGroupText } from 'reactstrap';
+import { Badge, Button, Input, InputGroup, InputGroupText } from 'reactstrap';
 
 let ws;
+
+const DEFAULT_BASEDIR = 'F:\\22_SWARCH_PROJECT\\'; // 'C:\\swarchi\\license_plate_recognition\\video\\';
 
 export const Preview = (props) => {
   const [protocol,] = useState(props.protocol || 'ws:');
@@ -13,9 +15,17 @@ export const Preview = (props) => {
 
   const [datauri, setDatauri] = useState(undefined);
   const [video, setVideo] = useState('beaver1');
-  const [baseDir, setBaseDir] = useState('F:\\22_SWARCH_PROJECT\\');
+  const [baseDir, setBaseDir] = useState((localStorage.getItem('lgalpr_basedir') === undefined || localStorage.getItem('lgalpr_basedir') === null) ? DEFAULT_BASEDIR : localStorage.getItem('lgalpr_basedir'));
+  const [interval, setInterval] = useState(10);
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [log, setLog] = useState(undefined);
+
+  useEffect(() => {
+    if (baseDir !== undefined) {
+      localStorage.setItem('lgalpr_basedir', baseDir);
+    }
+  }, [baseDir])
 
   useEffect(() => {
     const connect = () => {
@@ -32,12 +42,21 @@ export const Preview = (props) => {
         }, 1000);
       }
       ws.onmessage = message => {
-        const m = JSON.parse(message.data);
-        if ('JPEG' in m) {
-          const img = "data:image/jpeg;base64," + m.JPEG;
-          setDatauri(img);
-        } else if ('PLATE' in m) {
-          console.log("TBD plate");
+        // console.log(message)
+        try {
+          const m = JSON.parse(message.data);
+          if ('JPEG' in m) {
+            const img = "data:image/jpeg;base64," + m.JPEG;
+            setDatauri(img);
+          } else if ('PLATE' in m) {
+            console.log("TBD plate");
+          } else if ('status' in m) {
+            if (m.status === 'finished') {
+              setIsPlaying(false);
+            }
+          }
+        } catch (err) {
+          console.error(err);
         }
       };
     }
@@ -51,16 +70,17 @@ export const Preview = (props) => {
   const getUrl = () => { return protocol + '//' + host + ':' + port }
 
   const sendRequest = () => {
-    const s = JSON.stringify({ request: isPlaying ? 'stop' : 'start', filepath: isPlaying ? undefined : ("FILE:" + baseDir + video) });
+    const param = isPlaying ?
+      { request: 'stop' } :
+      {
+        request: 'start',
+        interval: "" + interval,
+        filepath: ("FILE:" + baseDir + video + '.avi')
+      }
+    const s = JSON.stringify(param);
     setIsPlaying(!isPlaying);
     ws.send(s);
-    setLog("Send a request to ALPR: " + s);
-  }
-
-  const sendStop = () => {
-    const s = JSON.stringify({ request: 'stop' })
-    ws.send(s);
-    setLog("Send a request to ALPR: " + s);
+    setLog("Request: " + (param.request + (isPlaying ? "" : " | " + interval + " | " + video)));
   }
 
   const getInfo = () => {
@@ -68,11 +88,12 @@ export const Preview = (props) => {
   }
 
   return (
-    <div style={{ position: 'relative', width: '100%' }} >
+    <div style={{ position: 'relative', width: '100%', zIndex: 0 }} >
+
 
       <div style={props.fitToWindow ?
         { position: 'absolute', margin: '1em', width: '450px', padding: '2em', borderRadius: '25px', background: 'rgba(255,255,255,0.7)', zIndex: 1 } :
-        { float: 'left', width: '40%', padding: '2em' }}>
+        { float: 'left', width: '40%', padding: '2em', zIndex: 1 }}>
         {props.showDetail && <>
           <Badge
             style={{ marginBottom: '1em', fontSize: "0.8em" }}
@@ -121,6 +142,18 @@ export const Preview = (props) => {
             onChange={e => setBaseDir(e.target.value)}
           />
         </InputGroup>
+        <InputGroup size="sm" style={{ marginBottom: '1em' }}>
+          <InputGroupText >
+            Interval
+          </InputGroupText>
+          <Input
+            id="interval"
+            name="interval"
+            type="textfield"
+            defaultValue={interval}
+            onChange={e => setInterval(e.target.value)}
+          />
+        </InputGroup>
         <InputGroup size="sm">
           <InputGroupText >
             Select
@@ -145,14 +178,8 @@ export const Preview = (props) => {
           </>}
       </div>
 
-      <div style={props.fitToWindow ?
-        { position: 'relative', width: '100%', zIndex: 0 } :
-        { float: 'left', width: '50%' }} >
-        <img src={datauri}
-          style={props.fitToWindow ?
-            { width: '100%' } :
-            {}}
-        />
+      <div style={props.fitToWindow ? { position: 'relative', width: '100%' } : { float: 'left', width: '50%' }} >
+        <img src={datauri} style={props.fitToWindow ? { width: '80%' } : {}} />
       </div>
     </div >
   );
