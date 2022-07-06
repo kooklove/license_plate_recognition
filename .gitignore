@@ -2,3 +2,4 @@
 /doxygen
 **/.idea/
 **/package-lock.json
+*.obj

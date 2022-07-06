@@ -31,11 +31,15 @@ import USERLIST from '../_mock/user';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
+  { id: 'Registration', label: 'Registration', alignRight: false },
+  { id: 'ownerName', label: 'ownerName', alignRight: false },
+  { id: 'ownerBirth', label: 'ownerBirth', alignRight: false },
+  { id: 'ownerAddress', label: 'ownerAddress', alignRight: false },
+  { id: 'ownerCity', label: 'ownerCity', alignRight: false },
+  { id: 'vehicleYear', label: 'vehicleYear', alignRight: false },
+  { id: 'vehicleMaker', label: 'vehicleMaker', alignRight: false },
+  { id: 'vehicleModel', label: 'vehicleModel', alignRight: false },
+  { id: 'vehicleColor', label: 'vehicleColor', alignRight: false },
   { id: '' },
 ];
 

@@ -89,19 +89,19 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar, accoun
         <Stack alignItems="center" spacing={3} sx={{ pt: 5, borderRadius: 2, position: 'relative' }}>
           
 
-          <Box sx={{ textAlign: 'center' }}>
-            {/* <Typography gutterBottom variant="h6">
+          {/* <Box sx={{ textAlign: 'center' }}>
+            <Typography gutterBottom variant="h6">
             Copyright©2022 LG Electronics. All Rights Reserved
-            </Typography> */}
+            </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
               LG Software Architect 2022 Team 4
             </Typography>
-          </Box>
+          </Box> */}
 
           <Box
             component="img"
-            src="/static/icons/logo.png"
-            sx={{ width: 100, position: 'absolute', top: -50 }}
+            src="/static/icons/logo_team.png"
+            sx={{ position: 'absolute', top: -50 }}
           />
         </Stack>
       </Box>
