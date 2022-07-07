@@ -240,6 +240,10 @@ bool ALPRFacade::detectandshow(Alpr* alpr, cv::Mat frame, std::string region, bo
     }
     else
     {
+        char find_str_I = 'I';
+        char replace_str_one = '1';
+        char find_str_Q = 'Q';
+        char replace_str_zero = '0';
         for (int i = 0; i < results.plates.size(); i++)
         {
             char textbuffer[1024];
@@ -248,6 +252,8 @@ bool ALPRFacade::detectandshow(Alpr* alpr, cv::Mat frame, std::string region, bo
                 pointset.push_back(Point2i(results.plates[i].plate_points[z].x, results.plates[i].plate_points[z].y));
             cv::Rect rect = cv::boundingRect(pointset);
             cv::rectangle(frame, rect, cv::Scalar(0, 255, 0), 2);
+            replace(results.plates[i].bestPlate.characters.begin(), results.plates[i].bestPlate.characters.end(), find_str_I, replace_str_one);
+            replace(results.plates[i].bestPlate.characters.begin(), results.plates[i].bestPlate.characters.end(), find_str_Q, replace_str_zero);
             sprintf_s(textbuffer, "%s - %.2f", results.plates[i].bestPlate.characters.c_str(), results.plates[i].bestPlate.overall_confidence);
 
             cv::putText(frame, textbuffer,
