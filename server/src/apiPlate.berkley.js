@@ -1,129 +1,30 @@
-import mongoose from 'mongoose';
-//import {Schema} from 'mongoose';
-//import mongodb from 'mongodb';
+//import { PrismaClient } from '@prisma/client';
+import bdb from 'berkeleydb';
 import levenshtein from 'fast-levenshtein';
 
 var result;
-
-const platenumberSchema = new mongoose.Schema({
-  plate: {
-    required: true,
-    type: String,
-  },
-  status: {
-    required: true,
-    type: String,
-  },
-  registration: {
-    required: true,
-    type: String,
-  },
-  ownerName:  {
-    required: true,
-    type: String,
-  },
-  ownerBirth:  {
-    required: true,
-    type: String,
-  },
-  ownerAddress:  {
-    required: true,
-    type: String,
-  },
-  ownerCity:  {
-    required: true,
-    type: String,
-  },
-  vehicleYear:  {
-    required: true,
-    type: Number,
-  },  
-  vehicleMaker:  {
-    required: true,
-    type: String,
-  },
-  vehicleModel:  {
-    required: true,
-    type: String,
-  },
-  vehicleColor:  {
-    required: true,
-    type: String,
-  }
-});
+var db = new bdb.Db(); // create a new Db object
+dbenv.open("licenseplate_.db");
 
 //const prisma = new PrismaClient();
-mongoose.connect('mongodb://localhost:27017/lgeswa2022');
-var db = mongoose.connection;
-// 4. 연결 실패
-db.on('error', function(){
-  console.log('Connection Failed!');
-});
-// 5. 연결 성공
-db.once('open', function() {
-  console.log('Connected!');
-});
-const collections = mongoose.model('platenumber', platenumberSchema);
 
 const apiPlate = async (req, res) => {
   try {
-    let distance;
-    var partial_result = [];
     console.log('[apiPlate] req.body:', req.body);
     const plateNumber = req.body.plateNumber;
     console.log('[apiPlate] plateNumber: ' + plateNumber);
 
-    let start = new Date();
+    
     // exact match
-    var result = await collections.find(
-      {
-        plate: plateNumber  
-      }
-    );
-    let end = new Date();
-    console.log(`${end - start}ms`)
+    var result =db.get(plateNumber); // get
 
-    if (result.length)
+    if (result.length == 0) //if no match
     {
-      res.json(JSON.stringify(result));
-    }
-    else //if no match
-    {
-      let word = plateNumber.substring(0, 3);
-      console.log(word);
       //TODO: partial match
-      var result = await collections.find(
-        {
-          plate: /^LKY/
-        }
-      );
-
-      //console.log(result.length);
-      
-      if (result.length > 10)
-      {
-        
-        for (var i=0;i<result.length;i++)
-        {
-          distance = levenshtein.get(plateNumber, result[i].plate);
-          //console.log(distance);
-          if (distance < 2)
-          {
-            partial_result.push(result[i]);
-          }
-        }
-        console.log(partial_result.length);
-        res.json(JSON.stringify(partial_result));       
-      }
-      else
-      {
-        res.json(JSON.stringify(result));
-      }
-      
     }
 
-    //console.log(result);
-    //res.json(JSON.stringify(result));
+    console.log(result);
+    res.json(JSON.stringify(result));
   } catch (err) {
     console.error(err);
     res.status(500);        //sending failure to the client
