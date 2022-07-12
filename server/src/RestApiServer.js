@@ -3,6 +3,7 @@ import express from 'express';
 import { apiPlate } from './apiPlate.Solr.js';
 // import { apiPlate, apiPlatePartial } from './apiPlate.js';
 import { apiPlateFaked } from './apiPlateFaked.js';
+import { userFind } from './auth.js'
 // import { createRequire } from "module";
 // const require = createRequire(import.meta.url);
 import morgan from 'morgan';
@@ -31,27 +32,10 @@ export default class RestApiServer {
     app.use(express.json());
     app.use(express.urlencoded({ extended: false }));
 
-    // 임시 id, pw 배열 , DB 로 변경 필요
-    const users = [
-      { id: "hello", pw: "world" },
-      { id: "good", pw: "bye" },
-    ];
-
-    // 로그인 id, pw 확인
-    const login = (id, pw) => {
-      let len = users.length;
-
-      for (let i = 0; i < len; i++) {
-          if (id === users[i].id && pw === users[i].pw) return id;
-      }
-
-      return "";
-    };
-
     // access token을 secret key 기반으로 생성
     const generateAccessToken = (id) => {
       return jwt.sign({ id }, process.env.ACCESS_TOKEN_SECRET, {
-          expiresIn: "4h",
+        expiresIn: process.env.JWS_TOKEN_EXPIRARTION,
       });
     };
 
@@ -63,17 +47,25 @@ export default class RestApiServer {
     };
 
     // login 요청 및 성공시 access token, refresh token 발급
-    app.post("/login", (req, res) => {
+    app.post("/login", async (req, res) => {
       let id = req.body.id;
       let pw = req.body.pw;
 
-      let user = login(id, pw);
-      if (user === "") return res.sendStatus(500);
 
-      let accessToken = generateAccessToken(user);
-      let refreshToken = generateRefreshToken(user);
+      const person = await userFind.findOne({ 'id': id }, 'id passwd');
+              
+      if ( person == null || person.id === "") 
+        return res.sendStatus(401);
 
-      res.json({ accessToken, refreshToken });
+      if (id === person.id  && pw === person.passwd ){
+        let accessToken = generateAccessToken(id);
+        let refreshToken = generateRefreshToken(id);
+
+        res.json({ accessToken, refreshToken });
+      }
+      else
+        return res.sendStatus(401);
+
     });
 
     // access token의 유효성 검사
@@ -114,13 +106,6 @@ export default class RestApiServer {
           }
       );
     });
-
-    // access token 유효성 확인을 위한 예시 요청
-    app.get("/user", authenticateAccessToken, (req, res) => {
-      console.log(req.user);
-      res.json(users.filter((user) => user.id === req.user.id));
-    });
-
 
     app.post('/plateFaked',authenticateAccessToken, (req, res) => {
       return apiPlateFaked(req, res)
