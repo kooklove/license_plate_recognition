@@ -1,0 +1,1 @@
+bin\solr start -c -p 8983 -s example/cloud/node1/solr

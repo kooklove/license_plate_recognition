@@ -1,0 +1,124 @@
+2022-07-12 04:28:17.131 INFO  (main) [] o.e.j.u.log Logging initialized @1769ms to org.eclipse.jetty.util.log.Slf4jLog
+2022-07-12 04:28:17.434 INFO  (main) [] o.e.j.s.Server jetty-9.4.44.v20210927; built: 2021-09-27T23:02:44.612Z; git: 8da83308eeca865e495e53ef315a249d63ba9332; jvm 18.0.1.1+2-6
+2022-07-12 04:28:18.082 INFO  (main) [] o.a.s.s.CoreContainerProvider Using logger factory org.apache.logging.slf4j.Log4jLoggerFactory
+2022-07-12 04:28:18.083 INFO  (main) [] o.a.s.s.CoreContainerProvider  ___      _       Welcome to Apache Solr™ version 9.0.0
+2022-07-12 04:28:18.083 INFO  (main) [] o.a.s.s.CoreContainerProvider / __| ___| |_ _   Starting in cloud mode on port 8983
+2022-07-12 04:28:18.083 INFO  (main) [] o.a.s.s.CoreContainerProvider \__ \/ _ \ | '_|  Install dir: D:\Documents\SW_Architect\CMU_Lecture\Project\license_plate_recognition\solr-9.0.0
+2022-07-12 04:28:18.083 INFO  (main) [] o.a.s.s.CoreContainerProvider |___/\___/_|_|    Start time: 2022-07-12T04:28:18.083187800Z
+2022-07-12 04:28:18.102 INFO  (main) [] o.a.s.s.CoreContainerProvider Solr Home: D:\Documents\SW_Architect\CMU_Lecture\Project\license_plate_recognition\solr-9.0.0\example\cloud\node1\solr (source: system property: solr.solr.home)
+2022-07-12 04:28:18.102 INFO  (main) [] o.a.s.c.SolrXmlConfig Loading solr.xml from D:\Documents\SW_Architect\CMU_Lecture\Project\license_plate_recognition\solr-9.0.0\example\cloud\node1\solr\solr.xml
+2022-07-12 04:28:19.222 WARN  (main) [] o.a.s.u.StartupLoggingUtils Jetty request logging enabled. Will retain logs for last 3 days. See chapter "Configuring Logging" in reference guide for how to configure.
+2022-07-12 04:28:19.241 INFO  (main) [] o.a.s.c.SolrZkServerProps Reading configuration from: D:\Documents\SW_Architect\CMU_Lecture\Project\license_plate_recognition\solr-9.0.0\example\cloud\node1\solr\zoo.cfg
+2022-07-12 04:28:19.241 INFO  (main) [] o.a.s.c.SolrZkServer STARTING EMBEDDED STANDALONE ZOOKEEPER SERVER at port 9983
+2022-07-12 04:28:19.241 WARN  (main) [] o.a.s.c.SolrZkServer Embedded Zookeeper is not recommended in production environments. See Reference Guide for details.
+2022-07-12 04:28:19.326 WARN  (embeddedZkServer) [] o.a.z.s.ServerCnxnFactory maxCnxns is not configured, using default value 0.
+2022-07-12 04:28:19.751 INFO  (main) [] o.a.s.c.ZkContainer Zookeeper client=localhost:9983
+2022-07-12 04:28:19.771 INFO  (main) [] o.a.s.c.DistributedClusterStateUpdater Creating DistributedClusterStateUpdater with useDistributedStateUpdate=false. Solr will be using Overseer based cluster state updates.
+2022-07-12 04:28:19.812 INFO  (main) [] o.a.s.c.c.ConnectionManager Waiting up to 30000ms for client to connect to ZooKeeper
+2022-07-12 04:28:19.818 WARN  (main-SendThread(localhost:9983)) [] o.a.z.ClientCnxn Session 0x0 for sever localhost/[0:0:0:0:0:0:0:1]:9983, Closing socket connection. Attempting reconnect except it is a SessionExpiredException. => java.net.ConnectException: Connection refused: no further information
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
+java.net.ConnectException: Connection refused: no further information
+	at sun.nio.ch.Net.pollConnect(Native Method) ~[?:?]
+	at sun.nio.ch.Net.pollConnectNow(Net.java:672) ~[?:?]
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:946) ~[?:?]
+	at org.apache.zookeeper.ClientCnxnSocketNIO.doTransport(ClientCnxnSocketNIO.java:344) ~[?:?]
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1280) ~[?:?]
+2022-07-12 04:28:20.944 INFO  (zkConnectionManagerCallback-10-thread-1) [] o.a.s.c.c.ConnectionManager zkClient has connected
+2022-07-12 04:28:20.944 INFO  (main) [] o.a.s.c.c.ConnectionManager Client is connected to ZooKeeper
+2022-07-12 04:28:20.997 WARN  (main) [] o.a.s.c.ZkController Contents of zookeeper /security.json are world-readable; consider setting up ACLs as described in https://solr.apache.org/guide/zookeeper-access-control.html
+2022-07-12 04:28:21.048 INFO  (main) [] o.a.s.c.DistributedClusterStateUpdater Creating DistributedClusterStateUpdater with useDistributedStateUpdate=false. Solr will be using Overseer based cluster state updates.
+2022-07-12 04:28:21.060 INFO  (main) [] o.a.s.c.OverseerElectionContext I am going to be the leader 10.58.7.138:8983_solr
+2022-07-12 04:28:21.068 INFO  (main) [] o.a.s.c.Overseer Overseer (id=72085309217701888-10.58.7.138:8983_solr-n_0000000004) starting
+2022-07-12 04:28:21.152 INFO  (main) [] o.a.s.c.ZkController Register node as live in ZooKeeper:/live_nodes/10.58.7.138:8983_solr
+2022-07-12 04:28:21.153 INFO  (OverseerStateUpdate-72085309217701888-10.58.7.138:8983_solr-n_0000000004) [] o.a.s.c.Overseer Starting to work on the main queue : 10.58.7.138:8983_solr
+2022-07-12 04:28:21.168 INFO  (zkCallback-9-thread-1) [] o.a.s.c.c.ZkStateReader Updated live nodes from ZooKeeper... (0) -> (1)
+2022-07-12 04:28:21.242 INFO  (main) [] o.a.s.p.PackageLoader /packages.json updated to version -1
+2022-07-12 04:28:21.289 WARN  (main) [] o.a.s.c.CoreContainer Not all security plugins configured!  authentication=disabled authorization=disabled.  Solr is only as secure as you make it. Consider configuring authentication/authorization before exposing Solr to users internal or external.  See https://s.apache.org/solrsecurity for more info
+2022-07-12 04:28:21.936 INFO  (main) [] o.a.s.c.CorePropertiesLocator Found 1 core definitions underneath D:\Documents\SW_Architect\CMU_Lecture\Project\license_plate_recognition\solr-9.0.0\example\cloud\node1\solr
+2022-07-12 04:28:21.937 INFO  (main) [] o.a.s.c.CorePropertiesLocator Cores are: [license_plate_shard1_replica_n1]
+2022-07-12 04:28:21.954 INFO  (coreLoadExecutor-17-thread-1-processing-10.58.7.138:8983_solr) [] o.a.s.c.TransientSolrCoreCacheDefault Allocating transient core cache for max 2147483647 cores with initial capacity of 1024
+2022-07-12 04:28:22.042 INFO  (coreLoadExecutor-17-thread-1-processing-10.58.7.138:8983_solr) [] o.a.s.c.SolrConfig Using Lucene MatchVersion: 9.0.0
+2022-07-12 04:28:22.181 INFO  (coreLoadExecutor-17-thread-1-processing-10.58.7.138:8983_solr) [] o.a.s.s.IndexSchema Schema name=default-config
+2022-07-12 04:28:22.530 INFO  (main) [] o.e.j.s.h.ContextHandler Started o.e.j.w.WebAppContext@538613b3{/solr,file:///D:/Documents/SW_Architect/CMU_Lecture/Project/license_plate_recognition/solr-9.0.0/server/solr-webapp/webapp/,AVAILABLE}{D:\Documents\SW_Architect\CMU_Lecture\Project\license_plate_recognition\solr-9.0.0\server/solr-webapp/webapp}
+2022-07-12 04:28:22.542 INFO  (main) [] o.e.j.s.RequestLogWriter Opened D:\Documents\SW_Architect\CMU_Lecture\Project\license_plate_recognition\solr-9.0.0\example\cloud\node1\logs\2022_07_12.request.log
+2022-07-12 04:28:22.558 INFO  (main) [] o.e.j.s.AbstractConnector Started ServerConnector@654d8173{HTTP/1.1, (http/1.1, h2c)}{0.0.0.0:8983}
+2022-07-12 04:28:22.558 INFO  (main) [] o.e.j.s.Server Started @7198ms
+2022-07-12 04:28:23.075 INFO  (coreLoadExecutor-17-thread-1-processing-10.58.7.138:8983_solr) [] o.a.s.s.IndexSchema Loaded schema default-config/1.6 with uniqueid field id
+2022-07-12 04:28:23.120 INFO  (coreLoadExecutor-17-thread-1-processing-10.58.7.138:8983_solr) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.c.SolrConfig Using Lucene MatchVersion: 9.0.0
+2022-07-12 04:28:23.126 INFO  (coreLoadExecutor-17-thread-1-processing-10.58.7.138:8983_solr) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.s.IndexSchema Schema name=default-config
+2022-07-12 04:28:23.192 INFO  (qtp242282810-21) [] o.a.s.s.HttpSolrCall [admin] webapp=null path=/admin/cores params={indexInfo=false&wt=json&_=1657600103035} status=0 QTime=51
+2022-07-12 04:28:23.265 INFO  (qtp242282810-22) [] o.a.s.s.HttpSolrCall [admin] webapp=null path=/admin/info/system params={wt=json&_=1657600103036} status=0 QTime=121
+2022-07-12 04:28:23.306 INFO  (coreLoadExecutor-17-thread-1-processing-10.58.7.138:8983_solr) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.s.IndexSchema Loaded schema default-config/1.6 with uniqueid field id
+2022-07-12 04:28:23.306 INFO  (coreLoadExecutor-17-thread-1-processing-10.58.7.138:8983_solr) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.c.CoreContainer Creating SolrCore 'license_plate_shard1_replica_n1' using configuration from configset license_plate, trusted=true
+2022-07-12 04:28:23.310 INFO  (qtp242282810-25) [] o.a.s.s.HttpSolrCall [admin] webapp=null path=/admin/collections params={action=LIST&wt=json&_=1657600103036} status=0 QTime=23
+2022-07-12 04:28:23.321 INFO  (qtp242282810-29) [] o.a.s.s.HttpSolrCall [admin] webapp=null path=/admin/collections params={action=LISTALIASES&wt=json&_=1657600103036} status=0 QTime=2
+2022-07-12 04:28:23.341 INFO  (qtp242282810-25) [] o.a.s.s.HttpSolrCall [admin] webapp=null path=/schema-designer/configs params={wt=json&_=1657600103036} status=0 QTime=6
+2022-07-12 04:28:23.347 INFO  (coreLoadExecutor-17-thread-1-processing-10.58.7.138:8983_solr) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.c.SolrCore Opening new SolrCore at [D:\Documents\SW_Architect\CMU_Lecture\Project\license_plate_recognition\solr-9.0.0\example\cloud\node1\solr\license_plate_shard1_replica_n1], dataDir=[D:\Documents\SW_Architect\CMU_Lecture\Project\license_plate_recognition\solr-9.0.0\example\cloud\node1\solr\license_plate_shard1_replica_n1\data\]
+2022-07-12 04:28:23.818 INFO  (qtp242282810-20) [] o.a.s.s.HttpSolrCall [admin] webapp=null path=/admin/info/system params={wt=json} status=0 QTime=62
+2022-07-12 04:28:23.862 INFO  (qtp242282810-25) [] o.a.s.s.HttpSolrCall [admin] webapp=null path=/admin/collections params={action=CLUSTERSTATUS&wt=json} status=0 QTime=11
+2022-07-12 04:28:24.279 INFO  (coreLoadExecutor-17-thread-1-processing-10.58.7.138:8983_solr) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.u.UpdateHandler Using UpdateLog implementation: org.apache.solr.update.UpdateLog
+2022-07-12 04:28:24.280 INFO  (coreLoadExecutor-17-thread-1-processing-10.58.7.138:8983_solr) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.u.UpdateLog Initializing UpdateLog: dataDir= defaultSyncLevel=FLUSH numRecordsToKeep=100 maxNumLogsToKeep=10 numVersionBuckets=65536
+2022-07-12 04:28:24.314 INFO  (coreLoadExecutor-17-thread-1-processing-10.58.7.138:8983_solr) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.u.CommitTracker Hard AutoCommit: if uncommitted for 15000ms; 
+2022-07-12 04:28:24.314 INFO  (coreLoadExecutor-17-thread-1-processing-10.58.7.138:8983_solr) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.u.CommitTracker Soft AutoCommit: if uncommitted for 3000ms; 
+2022-07-12 04:28:24.703 INFO  (coreLoadExecutor-17-thread-1-processing-10.58.7.138:8983_solr) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.r.ManagedResourceStorage Configured ZooKeeperStorageIO with znodeBase: /configs/license_plate
+2022-07-12 04:28:24.711 INFO  (coreLoadExecutor-17-thread-1-processing-10.58.7.138:8983_solr) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.r.ManagedResourceStorage Loaded null at path _rest_managed.json using ZooKeeperStorageIO:path=/configs/license_plate
+2022-07-12 04:28:24.714 INFO  (coreLoadExecutor-17-thread-1-processing-10.58.7.138:8983_solr) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.s.ZkIndexSchemaReader Creating ZooKeeper watch for the managed schema at /configs/license_plate/managed-schema.xml
+2022-07-12 04:28:24.717 INFO  (coreLoadExecutor-17-thread-1-processing-10.58.7.138:8983_solr) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.s.ZkIndexSchemaReader Current schema version 0 is already the latest
+2022-07-12 04:28:24.742 INFO  (coreLoadExecutor-17-thread-1-processing-10.58.7.138:8983_solr) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.s.DirectSolrSpellChecker init: {accuracy=0.5, maxQueryFrequency=0.01, maxEdits=2, minPrefix=1, maxInspections=5, minQueryLength=4, name=default, field=_text_, classname=solr.DirectSolrSpellChecker, distanceMeasure=internal}
+2022-07-12 04:28:24.762 INFO  (coreLoadExecutor-17-thread-1-processing-10.58.7.138:8983_solr) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.h.ReplicationHandler Commits will be reserved for 10000 ms
+2022-07-12 04:28:24.805 INFO  (searcherExecutor-19-thread-1-processing-10.58.7.138:8983_solr license_plate_shard1_replica_n1 license_plate shard1 core_node2) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.c.QuerySenderListener QuerySenderListener done.
+2022-07-12 04:28:24.805 INFO  (searcherExecutor-19-thread-1-processing-10.58.7.138:8983_solr license_plate_shard1_replica_n1 license_plate shard1 core_node2) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.h.c.SpellCheckComponent Loading spell index for spellchecker: default
+2022-07-12 04:28:24.817 INFO  (searcherExecutor-19-thread-1-processing-10.58.7.138:8983_solr license_plate_shard1_replica_n1 license_plate shard1 core_node2) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.c.SolrCore Registered new searcher autowarm time: 0 ms
+2022-07-12 04:28:24.844 INFO  (coreZkRegister-1-thread-1-processing-10.58.7.138:8983_solr) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.c.ShardLeaderElectionContextBase make sure parent is created /collections/license_plate/leaders/shard1
+2022-07-12 04:28:24.860 INFO  (coreZkRegister-1-thread-1-processing-10.58.7.138:8983_solr) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.c.ShardLeaderElectionContext Enough replicas found to continue.
+2022-07-12 04:28:24.860 INFO  (coreZkRegister-1-thread-1-processing-10.58.7.138:8983_solr) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.c.ShardLeaderElectionContext I may be the new leader - try and sync
+2022-07-12 04:28:24.861 INFO  (coreZkRegister-1-thread-1-processing-10.58.7.138:8983_solr) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.c.SyncStrategy Sync replicas to http://10.58.7.138:8983/solr/license_plate_shard1_replica_n1/
+2022-07-12 04:28:24.866 INFO  (coreZkRegister-1-thread-1-processing-10.58.7.138:8983_solr) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.c.SyncStrategy Sync Success - now sync replicas to me
+2022-07-12 04:28:24.868 INFO  (coreZkRegister-1-thread-1-processing-10.58.7.138:8983_solr) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.c.SyncStrategy http://10.58.7.138:8983/solr/license_plate_shard1_replica_n1/ has no replicas
+2022-07-12 04:28:24.871 INFO  (coreZkRegister-1-thread-1-processing-10.58.7.138:8983_solr) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.c.ShardLeaderElectionContextBase Creating leader registration node /collections/license_plate/leaders/shard1/leader after winning as /collections/license_plate/leader_elect/shard1/election/72085309217701888-core_node2-n_0000000002
+2022-07-12 04:28:24.881 INFO  (coreZkRegister-1-thread-1-processing-10.58.7.138:8983_solr) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.c.ShardLeaderElectionContext I am the new leader: http://10.58.7.138:8983/solr/license_plate_shard1_replica_n1/ shard1
+2022-07-12 04:28:24.900 INFO  (coreZkRegister-1-thread-1-processing-10.58.7.138:8983_solr) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.c.ZkController I am the leader, no recovery necessary
+2022-07-12 04:28:24.933 INFO  (zkCallback-9-thread-1) [] o.a.s.c.c.ZkStateReader A cluster state change: [WatchedEvent state:SyncConnected type:NodeDataChanged path:/collections/license_plate/state.json] for collection [license_plate] has occurred - updating... (live nodes size: [1])
+2022-07-12 04:28:24.934 INFO  (zkCallback-9-thread-2) [] o.a.s.c.c.ZkStateReader A cluster state change: [WatchedEvent state:SyncConnected type:NodeDataChanged path:/collections/license_plate/state.json] for collection [license_plate] has occurred - updating... (live nodes size: [1])
+2022-07-12 04:28:24.935 INFO  (zkCallback-9-thread-5) [] o.a.s.c.c.ZkStateReader A cluster state change: [WatchedEvent state:SyncConnected type:NodeDataChanged path:/collections/license_plate/state.json] for collection [license_plate] has occurred - updating... (live nodes size: [1])
+2022-07-12 04:28:24.935 INFO  (zkCallback-9-thread-3) [] o.a.s.c.c.ZkStateReader A cluster state change: [WatchedEvent state:SyncConnected type:NodeDataChanged path:/collections/license_plate/state.json] for collection [license_plate] has occurred - updating... (live nodes size: [1])
+2022-07-12 04:28:24.938 INFO  (zkCallback-9-thread-4) [] o.a.s.c.c.ZkStateReader A cluster state change: [WatchedEvent state:SyncConnected type:NodeDataChanged path:/collections/license_plate/state.json] for collection [license_plate] has occurred - updating... (live nodes size: [1])
+2022-07-12 04:28:25.008 INFO  (qtp242282810-27) [] o.a.s.s.HttpSolrCall [admin] webapp=null path=/admin/cores params={indexInfo=false&wt=json&_=1657600104931} status=0 QTime=0
+2022-07-12 04:28:25.066 INFO  (qtp242282810-26) [] o.a.s.s.HttpSolrCall [admin] webapp=null path=/admin/info/system params={wt=json&_=1657600104931} status=0 QTime=59
+2022-07-12 04:28:25.077 INFO  (qtp242282810-21) [] o.a.s.s.HttpSolrCall [admin] webapp=null path=/admin/collections params={action=LIST&wt=json&_=1657600104931} status=0 QTime=0
+2022-07-12 04:28:25.084 INFO  (qtp242282810-26) [] o.a.s.s.HttpSolrCall [admin] webapp=null path=/admin/collections params={action=LISTALIASES&wt=json&_=1657600104931} status=0 QTime=1
+2022-07-12 04:28:25.092 INFO  (qtp242282810-21) [] o.a.s.s.HttpSolrCall [admin] webapp=null path=/schema-designer/configs params={wt=json&_=1657600104931} status=0 QTime=2
+2022-07-12 04:28:25.097 INFO  (qtp242282810-28) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.c.S.Request webapp=/solr path=/select params={q=*:*&indent=true&q.op=OR&_=1657600104989} hits=25000 status=0 QTime=87
+2022-07-12 04:28:43.495 INFO  (ShutdownMonitor) [] o.e.j.s.AbstractConnector Stopped ServerConnector@654d8173{HTTP/1.1, (http/1.1, h2c)}{0.0.0.0:8983}
+2022-07-12 04:28:43.505 INFO  (ShutdownMonitor) [] o.a.s.c.CoreContainer Shutting down CoreContainer instance=1863103905
+2022-07-12 04:28:43.505 INFO  (ShutdownMonitor) [] o.a.s.c.ZkController Remove node as live in ZooKeeper:/live_nodes/10.58.7.138:8983_solr
+2022-07-12 04:28:43.514 INFO  (ShutdownMonitor) [] o.a.s.c.ZkController Publish this node as DOWN...
+2022-07-12 04:28:43.514 INFO  (ShutdownMonitor) [] o.a.s.c.ZkController Publish node=10.58.7.138:8983_solr as DOWN
+2022-07-12 04:28:43.515 INFO  (zkCallback-9-thread-4) [] o.a.s.c.c.ZkStateReader Updated live nodes from ZooKeeper... (1) -> (0)
+2022-07-12 04:28:43.522 INFO  (coreCloseExecutor-26-thread-1) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.c.SolrCore CLOSING SolrCore org.apache.solr.core.SolrCore@24f8c19b license_plate_shard1_replica_n1
+2022-07-12 04:28:43.522 INFO  (zkCallback-9-thread-4) [] o.a.s.c.c.ZkStateReader A cluster state change: [WatchedEvent state:SyncConnected type:NodeDataChanged path:/collections/license_plate/state.json] for collection [license_plate] has occurred - updating... (live nodes size: [0])
+2022-07-12 04:28:43.522 INFO  (zkCallback-9-thread-3) [] o.a.s.c.c.ZkStateReader A cluster state change: [WatchedEvent state:SyncConnected type:NodeDataChanged path:/collections/license_plate/state.json] for collection [license_plate] has occurred - updating... (live nodes size: [0])
+2022-07-12 04:28:43.522 INFO  (zkCallback-9-thread-5) [] o.a.s.c.c.ZkStateReader A cluster state change: [WatchedEvent state:SyncConnected type:NodeDataChanged path:/collections/license_plate/state.json] for collection [license_plate] has occurred - updating... (live nodes size: [0])
+2022-07-12 04:28:43.522 INFO  (zkCallback-9-thread-6) [] o.a.s.c.c.ZkStateReader A cluster state change: [WatchedEvent state:SyncConnected type:NodeDataChanged path:/collections/license_plate/state.json] for collection [license_plate] has occurred - updating... (live nodes size: [0])
+2022-07-12 04:28:43.522 INFO  (zkCallback-9-thread-2) [] o.a.s.c.c.ZkStateReader A cluster state change: [WatchedEvent state:SyncConnected type:NodeDataChanged path:/collections/license_plate/state.json] for collection [license_plate] has occurred - updating... (live nodes size: [0])
+2022-07-12 04:28:43.522 INFO  (coreCloseExecutor-26-thread-1) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.m.SolrMetricManager Closing metric reporters for registry=solr.core.license_plate.shard1.replica_n1 tag=SolrCore@24f8c19b
+2022-07-12 04:28:43.551 INFO  (coreCloseExecutor-26-thread-1) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.m.SolrMetricManager Closing metric reporters for registry=solr.collection.license_plate.shard1.leader tag=SolrCore@24f8c19b
+2022-07-12 04:28:43.556 INFO  (coreCloseExecutor-26-thread-1) [c:license_plate s:shard1 r:core_node2 x:license_plate_shard1_replica_n1] o.a.s.u.DirectUpdateHandler2 Committing on IndexWriter.close()  ... SKIPPED (unnecessary).
+2022-07-12 04:28:43.576 INFO  (ShutdownMonitor) [] o.a.s.m.SolrMetricManager Closing metric reporters for registry=solr.node tag=null
+2022-07-12 04:28:43.586 INFO  (ShutdownMonitor) [] o.a.s.m.SolrMetricManager Closing metric reporters for registry=solr.jvm tag=null
+2022-07-12 04:28:43.591 INFO  (ShutdownMonitor) [] o.a.s.m.SolrMetricManager Closing metric reporters for registry=solr.jetty tag=null
+2022-07-12 04:28:43.595 INFO  (ShutdownMonitor) [] o.a.s.m.SolrMetricManager Closing metric reporters for registry=solr.cluster tag=null
+2022-07-12 04:28:43.598 INFO  (closeThreadPool-28-thread-1) [] o.a.s.c.Overseer Overseer (id=72085309217701888-10.58.7.138:8983_solr-n_0000000004) closing
+2022-07-12 04:28:43.598 INFO  (OverseerStateUpdate-72085309217701888-10.58.7.138:8983_solr-n_0000000004) [] o.a.s.c.Overseer Overseer Loop exiting : 10.58.7.138:8983_solr
+2022-07-12 04:28:43.599 INFO  (closeThreadPool-28-thread-2) [] o.a.s.c.Overseer Overseer (id=72085309217701888-10.58.7.138:8983_solr-n_0000000004) closing
+2022-07-12 04:28:43.704 INFO  (ShutdownMonitor) [] o.a.s.c.Overseer Overseer (id=72085309217701888-10.58.7.138:8983_solr-n_0000000004) closing
+2022-07-12 04:28:43.704 WARN  (embeddedZkServer) [] o.a.z.s.ZooKeeperServerMain Server interrupted => java.lang.InterruptedException
+	at java.base/java.util.concurrent.locks.AbstractQueuedSynchronizer.acquireSharedInterruptibly(AbstractQueuedSynchronizer.java:1048)
+java.lang.InterruptedException: null
+	at java.util.concurrent.locks.AbstractQueuedSynchronizer.acquireSharedInterruptibly(AbstractQueuedSynchronizer.java:1048) ~[?:?]
+	at java.util.concurrent.CountDownLatch.await(CountDownLatch.java:230) ~[?:?]
+	at org.apache.zookeeper.server.ZooKeeperServerMain.runFromConfig(ZooKeeperServerMain.java:183) ~[?:?]
+	at org.apache.solr.cloud.SolrZkServer.lambda$start$0(SolrZkServer.java:133) ~[?:?]
+	at java.lang.Thread.run(Thread.java:833) [?:?]
+2022-07-12 04:28:43.705 INFO  (embeddedZkServer) [] o.a.s.c.SolrZkServer ZooKeeper Server exited.
+2022-07-12 04:28:43.708 INFO  (ShutdownMonitor) [] o.e.j.s.h.ContextHandler Stopped o.e.j.w.WebAppContext@538613b3{/solr,null,STOPPED}{D:\Documents\SW_Architect\CMU_Lecture\Project\license_plate_recognition\solr-9.0.0\server/solr-webapp/webapp}

@@ -36,6 +36,7 @@ How many replicas per shard would you like to create? [2]
 1
 Please choose a configuration for the license_plate collection, available options are:
 _default or sample_techproducts_configs [_default]
+license_plate_configs
 
 Created collection 'license_plate' with 1 shard(s), 1 replica(s) with config-set 'license_plate'
 
@@ -54,6 +55,9 @@ java -jar -Dc=license_plate  -Dauto example\exampledocs\post.jar ..\OpenAPLR-3.1
 
 4. Start Solr
 bin\solr start -c -p 8983 -s example/cloud/node1/solr
+
+5. Stop Solr
+bin\solr stop -all
 
 ==============================
 4. Delete and Create Database

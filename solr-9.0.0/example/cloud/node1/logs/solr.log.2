@@ -1,0 +1,45 @@
+2022-07-12 04:25:51.905 INFO  (main) [] o.e.j.u.log Logging initialized @1863ms to org.eclipse.jetty.util.log.Slf4jLog
+2022-07-12 04:25:52.253 INFO  (main) [] o.e.j.s.Server jetty-9.4.44.v20210927; built: 2021-09-27T23:02:44.612Z; git: 8da83308eeca865e495e53ef315a249d63ba9332; jvm 18.0.1.1+2-6
+2022-07-12 04:25:52.946 INFO  (main) [] o.a.s.s.CoreContainerProvider Using logger factory org.apache.logging.slf4j.Log4jLoggerFactory
+2022-07-12 04:25:52.963 INFO  (main) [] o.a.s.s.CoreContainerProvider  ___      _       Welcome to Apache Solr™ version 9.0.0
+2022-07-12 04:25:52.963 INFO  (main) [] o.a.s.s.CoreContainerProvider / __| ___| |_ _   Starting in cloud mode on port 8983
+2022-07-12 04:25:52.963 INFO  (main) [] o.a.s.s.CoreContainerProvider \__ \/ _ \ | '_|  Install dir: D:\Documents\SW_Architect\CMU_Lecture\Project\license_plate_recognition\solr-9.0.0
+2022-07-12 04:25:52.963 INFO  (main) [] o.a.s.s.CoreContainerProvider |___/\___/_|_|    Start time: 2022-07-12T04:25:52.963500300Z
+2022-07-12 04:25:52.971 INFO  (main) [] o.a.s.s.CoreContainerProvider Solr Home: D:\Documents\SW_Architect\CMU_Lecture\Project\license_plate_recognition\solr-9.0.0\example\cloud\node1\solr (source: system property: solr.solr.home)
+2022-07-12 04:25:52.971 INFO  (main) [] o.a.s.c.SolrXmlConfig Loading solr.xml from D:\Documents\SW_Architect\CMU_Lecture\Project\license_plate_recognition\solr-9.0.0\example\cloud\node1\solr\solr.xml
+2022-07-12 04:25:54.308 WARN  (main) [] o.a.s.u.StartupLoggingUtils Jetty request logging enabled. Will retain logs for last 3 days. See chapter "Configuring Logging" in reference guide for how to configure.
+2022-07-12 04:25:54.308 INFO  (main) [] o.a.s.c.SolrZkServerProps Reading configuration from: D:\Documents\SW_Architect\CMU_Lecture\Project\license_plate_recognition\solr-9.0.0\example\cloud\node1\solr\zoo.cfg
+2022-07-12 04:25:54.324 INFO  (main) [] o.a.s.c.SolrZkServer STARTING EMBEDDED STANDALONE ZOOKEEPER SERVER at port 9983
+2022-07-12 04:25:54.324 WARN  (main) [] o.a.s.c.SolrZkServer Embedded Zookeeper is not recommended in production environments. See Reference Guide for details.
+2022-07-12 04:25:54.374 WARN  (embeddedZkServer) [] o.a.z.s.ServerCnxnFactory maxCnxns is not configured, using default value 0.
+2022-07-12 04:25:54.825 INFO  (main) [] o.a.s.c.ZkContainer Zookeeper client=localhost:9983
+2022-07-12 04:25:54.837 INFO  (main) [] o.a.s.c.DistributedClusterStateUpdater Creating DistributedClusterStateUpdater with useDistributedStateUpdate=false. Solr will be using Overseer based cluster state updates.
+2022-07-12 04:25:54.864 INFO  (main) [] o.a.s.c.c.ConnectionManager Waiting up to 30000ms for client to connect to ZooKeeper
+2022-07-12 04:25:54.886 INFO  (zkConnectionManagerCallback-10-thread-1) [] o.a.s.c.c.ConnectionManager zkClient has connected
+2022-07-12 04:25:54.886 INFO  (main) [] o.a.s.c.c.ConnectionManager Client is connected to ZooKeeper
+2022-07-12 04:25:54.925 WARN  (main) [] o.a.s.c.ZkController Contents of zookeeper /security.json are world-readable; consider setting up ACLs as described in https://solr.apache.org/guide/zookeeper-access-control.html
+2022-07-12 04:25:54.935 INFO  (main) [] o.a.s.c.c.ZkStateReader Updated live nodes from ZooKeeper... (0) -> (1)
+2022-07-12 04:25:54.967 INFO  (main) [] o.a.s.c.DistributedClusterStateUpdater Creating DistributedClusterStateUpdater with useDistributedStateUpdate=false. Solr will be using Overseer based cluster state updates.
+2022-07-12 04:25:54.985 INFO  (main) [] o.a.s.c.ZkController Publish node=10.58.7.138:8983_solr as DOWN
+2022-07-12 04:25:54.997 INFO  (main) [] o.a.s.c.TransientSolrCoreCacheDefault Allocating transient core cache for max 2147483647 cores with initial capacity of 1024
+2022-07-12 04:25:55.007 INFO  (main) [] o.a.s.c.ZkController Register node as live in ZooKeeper:/live_nodes/10.58.7.138:8983_solr
+2022-07-12 04:25:55.018 INFO  (zkCallback-9-thread-1) [] o.a.s.c.c.ZkStateReader Updated live nodes from ZooKeeper... (1) -> (2)
+2022-07-12 04:25:55.094 INFO  (main) [] o.a.s.p.PackageLoader /packages.json updated to version -1
+2022-07-12 04:25:55.147 WARN  (main) [] o.a.s.c.CoreContainer Not all security plugins configured!  authentication=disabled authorization=disabled.  Solr is only as secure as you make it. Consider configuring authentication/authorization before exposing Solr to users internal or external.  See https://s.apache.org/solrsecurity for more info
+2022-07-12 04:25:55.657 INFO  (main) [] o.a.s.c.CorePropertiesLocator Found 1 core definitions underneath D:\Documents\SW_Architect\CMU_Lecture\Project\license_plate_recognition\solr-9.0.0\example\cloud\node1\solr
+2022-07-12 04:25:55.657 INFO  (main) [] o.a.s.c.CorePropertiesLocator Cores are: [license_plate_shard1_replica_n1]
+2022-07-12 04:25:55.726 INFO  (coreLoadExecutor-15-thread-1-processing-10.58.7.138:8983_solr) [] o.a.s.c.SolrConfig Using Lucene MatchVersion: 9.0.0
+2022-07-12 04:25:55.828 INFO  (coreLoadExecutor-15-thread-1-processing-10.58.7.138:8983_solr) [] o.a.s.s.IndexSchema Schema name=default-config
+2022-07-12 04:25:56.183 INFO  (main) [] o.e.j.s.h.ContextHandler Started o.e.j.w.WebAppContext@538613b3{/solr,file:///D:/Documents/SW_Architect/CMU_Lecture/Project/license_plate_recognition/solr-9.0.0/server/solr-webapp/webapp/,AVAILABLE}{D:\Documents\SW_Architect\CMU_Lecture\Project\license_plate_recognition\solr-9.0.0\server/solr-webapp/webapp}
+2022-07-12 04:25:56.194 INFO  (main) [] o.e.j.s.RequestLogWriter Opened D:\Documents\SW_Architect\CMU_Lecture\Project\license_plate_recognition\solr-9.0.0\example\cloud\node1\logs\2022_07_12.request.log
+2022-07-12 04:25:56.206 INFO  (main) [] o.e.j.s.AbstractConnector Started ServerConnector@654d8173{HTTP/1.1, (http/1.1, h2c)}{0.0.0.0:8983}
+2022-07-12 04:25:56.207 INFO  (main) [] o.e.j.s.Server Started @6167ms
+2022-07-12 04:25:56.545 INFO  (coreLoadExecutor-15-thread-1-processing-10.58.7.138:8983_solr) [] o.a.s.s.IndexSchema Loaded schema default-config/1.6 with uniqueid field id
+2022-07-12 04:25:56.623 INFO  (qtp242282810-24) [] o.a.s.s.HttpSolrCall [admin] webapp=null path=/admin/info/system params={wt=json} status=0 QTime=90
+2022-07-12 04:25:56.730 INFO  (qtp242282810-22) [] o.a.s.s.HttpSolrCall [admin] webapp=null path=/admin/collections params={action=CLUSTERSTATUS&wt=json} status=0 QTime=23
+2022-07-12 04:25:58.995 INFO  (ShutdownMonitor) [] o.e.j.s.AbstractConnector Stopped ServerConnector@654d8173{HTTP/1.1, (http/1.1, h2c)}{0.0.0.0:8983}
+2022-07-12 04:25:59.004 INFO  (ShutdownMonitor) [] o.a.s.c.CoreContainer Shutting down CoreContainer instance=1863103905
+2022-07-12 04:25:59.004 INFO  (ShutdownMonitor) [] o.a.s.c.ZkController Remove node as live in ZooKeeper:/live_nodes/10.58.7.138:8983_solr
+2022-07-12 04:25:59.014 INFO  (ShutdownMonitor) [] o.a.s.c.ZkController Publish this node as DOWN...
+2022-07-12 04:25:59.014 INFO  (ShutdownMonitor) [] o.a.s.c.ZkController Publish node=10.58.7.138:8983_solr as DOWN
+2022-07-12 04:25:59.015 INFO  (zkCallback-9-thread-1) [] o.a.s.c.c.ZkStateReader Updated live nodes from ZooKeeper... (2) -> (1)
