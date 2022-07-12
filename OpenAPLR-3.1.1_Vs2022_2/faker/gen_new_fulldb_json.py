@@ -302,15 +302,17 @@ for i in range(25000000):
         status = "No Wants / Warrants"
     output['status'] = status
     # output+=fake.date_this_year().strftime("%m/%d/%Y")+"\n"
-    output['date'] = fake.date_between_dates(date_start=datetime(2022, 1, 1), date_end=datetime(2024, 5, 1)).strftime(
+    output['registration'] = fake.date_between_dates(date_start=datetime(2022, 1, 1), date_end=datetime(2024, 5, 1)).strftime(
         "%m/%d/%Y")
-    output['name'] = fake.name()
-    output['birth'] = fake.date_of_birth().strftime("%m/%d/%Y")
+    output['ownerName'] = fake.name()
+    output['ownerBirth'] = fake.date_of_birth().strftime("%m/%d/%Y")
     # output+=fake.date_between_dates(date_start=datetime(1932,1,1), date_end=datetime(2004,1,1)).strftime("%m/%d/%Y")+"\n"
-    output['address'] = fake.address()
-    output['vehicle_year'] = fake.vehicle_year()
-    output['vehicle_make'] = fake.vehicle_make()
-    output['vehicle_model'] = fake.vehicle_model()
-    output['vehicle_color'] = fake.safe_color_name()
+    [address, ownerCity] = fake.address().split('\n')
+    output['ownerAddress'] = address
+    output['ownerCity'] = ownerCity
+    output['vehicleYear'] = fake.vehicle_year()
+    output['vehicleMaker'] = fake.vehicle_make()
+    output['vehicleModel'] = fake.vehicle_model()
+    output['vehicleColor'] = fake.safe_color_name()
     print(' ', json.dumps(output), ',')
 print(']')

@@ -1,0 +1,61 @@
+1. Download OpenJDK and extract
+
+2. Install SolrCould
+CMD> bin\solr start -e cloud
+
+Welcome to the SolrCloud example!
+
+This interactive session will help you launch a SolrCloud cluster on your local workstation.
+To begin, how many Solr nodes would you like to run in your local cluster? (specify 1-4 nodes) [2]:
+1
+Ok, let's start up 1 Solr nodes for your example SolrCloud cluster.
+Please enter the port for node1 [8983]:
+
+Creating Solr home directory D:\Documents\SW_Architect\CMU_Lecture\Project\license_plate_recognition\solr-9.0.0\example\cloud\node1\solr
+
+Starting up Solr on port 8983 using command:
+"D:\Documents\SW_Architect\CMU_Lecture\Project\license_plate_recognition\solr-9.0.0\bin\solr.cmd" start -cloud -p 8983 -s "D:\Documents\SW_Architect\CMU_Lecture\Project\license_plate_recognition\solr-9.0.0\example\cloud\node1\solr"
+
+WARNING: A command line option has enabled the Security Manager
+WARNING: The Security Manager is deprecated and will be removed in a future release
+Waiting up to 30 to see Solr running on port 8983
+INFO  - 2022-07-12 12:03:05.316; org.eclipse.jetty.util.log; Logging initialized @21898ms to org.eclipse.jetty.util.log.Slf4jLog
+INFO  - 2022-07-12 12:03:05.382; org.apache.solr.common.cloud.ConnectionManager; Waiting up to 15000ms for client to connect to ZooKeeper
+Started Solr server on port 8983. Happy searching!
+INFO  - 2022-07-12 12:03:09.866; org.apache.solr.common.cloud.ConnectionManager; zkClient has connected
+INFO  - 2022-07-12 12:03:09.866; org.apache.solr.common.cloud.ConnectionManager; Client is connected to ZooKeeper
+INFO  - 2022-07-12 12:03:09.875; org.apache.solr.common.cloud.ZkStateReader; Updated live nodes from ZooKeeper... (0) -> (1)
+INFO  - 2022-07-12 12:03:09.885; org.apache.solr.client.solrj.impl.ZkClientClusterStateProvider; Cluster at localhost:9983 ready
+
+Now let's create a new collection for indexing documents in your 1-node cluster.
+Please provide a name for your new collection: [gettingstarted]
+license_plate
+How many shards would you like to split license_plate into? [2]
+1
+How many replicas per shard would you like to create? [2]
+1
+Please choose a configuration for the license_plate collection, available options are:
+_default or sample_techproducts_configs [_default]
+
+Created collection 'license_plate' with 1 shard(s), 1 replica(s) with config-set 'license_plate'
+
+Enabling auto soft-commits with maxTime 3 secs using the Config API
+
+POSTing request to Config API: http://localhost:8983/solr/license_plate/config
+{"set-property":{"updateHandler.autoSoftCommit.maxTime":"3000"}}
+Successfully set-property updateHandler.autoSoftCommit.maxTime to 3000
+
+
+SolrCloud example running, please visit: http://localhost:8983/solr
+
+3. Import Database
+java -jar -Dc=license_plate  -Dauto example\exampledocs\post.jar ..\OpenAPLR-3.1.1_Vs2022_2\faker\datafile.json
+
+
+4. Start Solr
+bin\solr start -c -p 8983 -s example/cloud/node1/solr
+
+==============================
+4. Delete and Create Database
+bin\solr delete -c license_plate
+bin\solr create -c license_plate -s 1 -rf 1 -d license_plate_configs
