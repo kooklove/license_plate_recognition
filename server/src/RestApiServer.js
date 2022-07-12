@@ -1,6 +1,7 @@
 import express from 'express';
 
-import { apiPlate, apiPlatePartial } from './apiPlate.js';
+import { apiPlate } from './apiPlate.Solr.js';
+// import { apiPlate, apiPlatePartial } from './apiPlate.js';
 import { apiPlateFaked } from './apiPlateFaked.js';
 // import { createRequire } from "module";
 // const require = createRequire(import.meta.url);

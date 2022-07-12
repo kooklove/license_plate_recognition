@@ -5,3 +5,5 @@
 *.obj
 **/faker/datafile.json
 **/faker/datafile.txt
+solr-9.0.0/example/cloud/
+server/prisma/migrations/

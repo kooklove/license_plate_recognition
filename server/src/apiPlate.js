@@ -50,7 +50,7 @@ const platenumberSchema = new mongoose.Schema({
 });
 
 //const prisma = new PrismaClient();
-mongoose.connect('mongodb://localhost:27017/lgeswa2022');
+mongoose.connect('mongodb://10.58.2.34:27017/lgeswa2022');
 var db = mongoose.connection;
 // 4. 연결 실패
 db.on('error', function(){
