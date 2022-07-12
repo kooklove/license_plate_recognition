@@ -85,39 +85,38 @@ const apiPlate = async (req, res) => {
 
     if (result.length)
     {
-      res.json(JSON.stringify(result));
+      res.json(result);
     }
     else //if no match
     {
       let word = plateNumber.substring(0, 3);
       console.log(word);
+      const query = new RegExp('^'+ word);
       //TODO: partial match
       var result = await collections.find(
         {
-          plate: /^LKY/
+          plate: query
         }
       );
 
-      //console.log(result.length);
+      console.log(result.length);
       
-      if (result.length > 10)
+      if (result.length)
       {
-        
         for (var i=0;i<result.length;i++)
         {
           distance = levenshtein.get(plateNumber, result[i].plate);
-          //console.log(distance);
           if (distance < 2)
           {
             partial_result.push(result[i]);
           }
         }
         console.log(partial_result.length);
-        res.json(JSON.stringify(partial_result));       
+        res.json(partial_result);
       }
       else
       {
-        res.json(JSON.stringify(result));
+        res.json(result);
       }
       
     }
