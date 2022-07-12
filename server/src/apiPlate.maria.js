@@ -1,133 +1,38 @@
-import mongoose from 'mongoose';
-//import {Schema} from 'mongoose';
-//import mongodb from 'mongodb';
+import { PrismaClient } from '@prisma/client';
 import levenshtein from 'fast-levenshtein';
 
 var result;
 
-const platenumberSchema = new mongoose.Schema({
-  plate: {
-    required: true,
-    type: String,
-  },
-  status: {
-    required: true,
-    type: String,
-  },
-  registration: {
-    required: true,
-    type: String,
-  },
-  ownerName:  {
-    required: true,
-    type: String,
-  },
-  ownerBirth:  {
-    required: true,
-    type: String,
-  },
-  ownerAddress:  {
-    required: true,
-    type: String,
-  },
-  ownerCity:  {
-    required: true,
-    type: String,
-  },
-  vehicleYear:  {
-    required: true,
-    type: Number,
-  },  
-  vehicleMaker:  {
-    required: true,
-    type: String,
-  },
-  vehicleModel:  {
-    required: true,
-    type: String,
-  },
-  vehicleColor:  {
-    required: true,
-    type: String,
-  }
-});
-
-//const prisma = new PrismaClient();
-mongoose.connect('mongodb://localhost:27017/lgeswa2022');
-var db = mongoose.connection;
-// 4. 연결 실패
-db.on('error', function(){
-  console.log('Connection Failed!');
-});
-// 5. 연결 성공
-db.once('open', function() {
-  console.log('Connected!');
-});
-const collections = mongoose.model('platenumber', platenumberSchema);
+const prisma = new PrismaClient();
 
 const apiPlate = async (req, res) => {
   try {
-    let distance;
-    var partial_result = [];
     console.log('[apiPlate] req.body:', req.body);
     const plateNumber = req.body.plateNumber;
     console.log('[apiPlate] plateNumber: ' + plateNumber);
 
     let start = new Date();
     // exact match
-    var result = await collections.find(
-      {
-        plate: plateNumber  
-      }
-    );
+    var result = await prisma.plateNumber.findMany({
+      where: {
+        plate: plateNumber,
+      },
+    });
     let end = new Date();
     console.log(`${end - start}ms`)
 
-    if (result.length)
+    if (result.length == 0) //if no match
     {
-      res.json(result);
-    }
-    else //if no match
-    {
-      let word = plateNumber.substring(0, 3);
-      console.log(word);
-      const query = new RegExp('^'+ word);
       //TODO: partial match
-      var result = await collections.find(
-        {
-          plate: query
-        }
-      );
-
-      console.log(result.length);
-      
-      if (result.length)
-      {
-        for (var i=0;i<result.length;i++)
-        {
-          distance = levenshtein.get(plateNumber, result[i].plate);
-          if (distance < 2)
-          {
-            partial_result.push(result[i]);
-          }
-        }
-        console.log(partial_result.length);
-        res.json(partial_result);
-      }
-      else
-      {
-        res.json(result);
-      }
-      
     }
 
     //console.log(result);
-    //res.json(JSON.stringify(result));
+    res.json(JSON.stringify(result));
   } catch (err) {
     console.error(err);
     res.status(500);        //sending failure to the client
   } finally {
-    //await prisma.$disconnect();
+    await prisma.$disconnect();
   }
 }
 
