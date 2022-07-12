@@ -1,5 +1,6 @@
 {
   "max_dist_levenshtein": 1,
   "expiration ": 4,
-  "confidence" : "~1"
+  "confidence" : "~1",
+  "rows" : 3
 }
