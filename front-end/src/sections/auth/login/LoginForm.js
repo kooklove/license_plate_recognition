@@ -1,4 +1,5 @@
-import * as Yup from 'yup';
+import PropTypes from 'prop-types';
+// import * as Yup from 'yup';
 import { useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
@@ -8,6 +9,9 @@ import { LoadingButton } from '@mui/lab';
 // component
 import Iconify from '../../../components/Iconify';
 
+LoginForm.propTypes = {
+  onLogin: PropTypes.func,
+};
 // ----------------------------------------------------------------------
 
 export default function LoginForm({ onLogin }) {
@@ -15,10 +19,10 @@ export default function LoginForm({ onLogin }) {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const LoginSchema = Yup.object().shape({
-    email: Yup.string().email('Email must be a valid email address').required('Email is required'),
-    password: Yup.string().required('Password is required'),
-  });
+  // const LoginSchema = Yup.object().shape({
+  //   email: Yup.string().email('Email must be a valid email address').required('Email is required'),
+  //   password: Yup.string().required('Password is required'),
+  // });
 
   const formik = useFormik({
     initialValues: {
@@ -26,7 +30,7 @@ export default function LoginForm({ onLogin }) {
       password: '',
       remember: true,
     },
-    validationSchema: LoginSchema,
+    // validationSchema: LoginSchema,
     onSubmit: (data) => {
       onLogin(data);
       navigate('/dashboard/app', { replace: true });

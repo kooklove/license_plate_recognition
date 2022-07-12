@@ -39,10 +39,10 @@ const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
 DashboardNavbar.propTypes = {
   onOpenSidebar: PropTypes.func,
   onLogout: PropTypes.func,
-  onKeyword: PropTypes.func
+  onSearch: PropTypes.func
 };
 
-export default function DashboardNavbar({ onOpenSidebar, onLogout, onKeyword }) {
+export default function DashboardNavbar({ onOpenSidebar, onSearch, onLogout }) {
   return (
     <RootStyle>
       <ToolbarStyle>
@@ -50,13 +50,13 @@ export default function DashboardNavbar({ onOpenSidebar, onLogout, onKeyword }) 
           <Iconify icon="eva:menu-2-fill" />
         </IconButton>
 
-        <Searchbar onKeyword={onKeyword} />
+        <Searchbar onSearch={onSearch} />
         <Box sx={{ flexGrow: 1 }} />
 
         <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
           <LanguagePopover />
           <NotificationsPopover />
-          <AccountPopover onLogout={onLogout} />
+          <AccountPopover cbLogout={() => onLogout()} />
         </Stack>
       </ToolbarStyle>
     </RootStyle>

@@ -33,12 +33,12 @@ const SearchbarStyle = styled('div')(({ theme }) => ({
 }));
 
 Searchbar.propTypes = {
-  onKeyword: PropTypes.func 
+  onSearch: PropTypes.func
 };
 
 // ----------------------------------------------------------------------
 
-export default function Searchbar({ onKeyword }) {
+export default function Searchbar({ onSearch }) {
   const [isOpen, setOpen] = useState(false);
   const [keyword, setKeyword] = useState(undefined);
 
@@ -47,9 +47,11 @@ export default function Searchbar({ onKeyword }) {
   };
 
   const handleClose = () => {
-    // console.log(keyword);
-    onKeyword(keyword);
-    setOpen(false);
+    if (keyword !== undefined) {
+      console.log(keyword);
+      onSearch(keyword);
+      setOpen(false);
+    }
   };
 
   return (
