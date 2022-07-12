@@ -1,1 +1,1 @@
-python gen.py > datafile.txt
+python gen_new.py > datafile.json

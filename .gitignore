@@ -3,3 +3,5 @@
 **/.idea/
 **/package-lock.json
 *.obj
+**/faker/datafile.json
+**/faker/datafile.txt

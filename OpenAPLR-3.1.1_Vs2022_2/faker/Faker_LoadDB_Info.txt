@@ -1,0 +1,27 @@
+Pennsylvania License Plates
+===========================
+The letters I, O, Q, and U are not used on current passenger plates, 
+
+(26-4)^3 * 10^4=106,480,000
+
+
+Time to generate 25M License Plate Records
+==========================================
+faker>python gen.py  1>datafile.txt
+Elapsed time   : 12655.27
+3 hours 31 minutes
+
+size of file datafile.txt  -> 3,683,159,372 bytes
+
+
+Time to LoadDB 25M License Plate Records
+==========================================
+Elapsed time   : 1695.53
+28.25 minutes
+
+Unique 22,284,271 Duplicate 2,715,729 Total 25,000,000 Records
+
+10.86 % duplicated
+
+size of file licenseplate.db -> 5,373,075,456 bytes
+

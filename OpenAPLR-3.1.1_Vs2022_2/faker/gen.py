@@ -2,16 +2,11 @@ from faker import Faker
 from faker.generator import random
 from faker_vehicle import VehicleProvider
 from datetime import datetime
-import sys
-import io
-sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding = 'utf-8')
-sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding = 'utf-8')
-
 fake = Faker('en_US')
 fake.add_provider(VehicleProvider)
 Faker.seed(0)
  
-for i in range(150):
+for i in range(25000000):
  if i == 0:
   plate="LKY1360"
   rnum=2
@@ -40,8 +35,9 @@ for i in range(150):
   plate="ZDE1985"
   rnum=10  
  else:
-  plate=fake.license_plate().replace(" ","")
-  plate=plate.replace("-","")
+  #plate=fake.license_plate().replace(" ","")
+  #plate=plate.replace("-","")
+  plate=fake.bothify('???####',letters='ABCDEFGHJKLMNPRSTVWXYZ')
   rnum=fake.pyint(1,100)
  output=plate+"\n"
  if rnum < 3:
@@ -56,8 +52,8 @@ for i in range(150):
  #output+=fake.date_this_year().strftime("%m/%d/%Y")+"\n"
  output+=fake.date_between_dates(date_start=datetime(2022,1,1), date_end=datetime(2024,5,1)).strftime("%m/%d/%Y")+"\n"
  output+=fake.name()+"\n"
- #output+=fake.date_of_birth().strftime("%m/%d/%Y")+"\n"
- output+=fake.date_between_dates(date_start=datetime(1932,1,1), date_end=datetime(2004,1,1)).strftime("%m/%d/%Y")+"\n"
+ output+=fake.date_of_birth().strftime("%m/%d/%Y")+"\n"
+ #output+=fake.date_between_dates(date_start=datetime(1932,1,1), date_end=datetime(2004,1,1)).strftime("%m/%d/%Y")+"\n"
  output+=fake.address()+"\n"
  output+=fake.vehicle_year()+"\n"
  output+=fake.vehicle_make()+"\n"

@@ -1,0 +1,1 @@
+python gen_new_fulldb_text.py > datafile.json
