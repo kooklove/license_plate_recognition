@@ -62,10 +62,10 @@ db.once('open', function() {
 });
 const collections = mongoose.model('platenumber', platenumberSchema);
 const dist_levenshtein = config.max_dist_levenshtein;
-var partial_result = [];
-var result;
+
 
 const apiPlate = async (req, res) => {
+  var result;
   try {
     //console.log('[apiPlate] req.params:', req.params.platenumber);
     const plateNumber = req.params.platenumber;
@@ -87,6 +87,7 @@ const apiPlate = async (req, res) => {
     }
     else //if no exact match
     {
+      var partial_result = [];
       let word = plateNumber.substring(0, 3);
       //console.log(word);
       const query = new RegExp('^'+ word);
