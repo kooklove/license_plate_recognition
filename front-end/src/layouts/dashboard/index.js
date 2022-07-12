@@ -34,19 +34,20 @@ const MainStyle = styled('div')(({ theme }) => ({
 }));
 
 DashboardLayout.propTypes = {
-  onKeyword: PropTypes.func,
+  onSearch: PropTypes.func,
+  onLogout: PropTypes.func,
 };
 // ----------------------------------------------------------------------
 
-export default function DashboardLayout({ onKeyword }) {
+export default function DashboardLayout({ onSearch, onLogout }) {
   const [open, setOpen] = useState(false);
-
+  
   return (
     <RootStyle>
       <DashboardNavbar
         onOpenSidebar={() => setOpen(true)}
-        onLogout={() => alert("TBD: logout!!")}
-        onKeyword={(k) => onKeyword(k)}
+        onSearch={(k) => onSearch(k)}
+        onLogout={() => onLogout()}
       />
       <DashboardSidebar
         isOpenSidebar={open}

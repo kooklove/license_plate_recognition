@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
@@ -54,9 +55,12 @@ const ContentStyle = styled('div')(({ theme }) => ({
   padding: theme.spacing(12, 0),
 }));
 
+Login.propTypes = {
+  onLogin: PropTypes.func,
+};
 // ----------------------------------------------------------------------
 
-export default function Login() {
+export default function Login(props) {
   const smUp = useResponsive('up', 'sm');
 
   const mdUp = useResponsive('up', 'md');
@@ -96,7 +100,7 @@ export default function Login() {
 
             <AuthSocial />
 
-            <LoginForm onLogin={(data) => console.log("TBD ID/PW: ", data)} />
+            <LoginForm onLogin={props.onLogin} />
 
             {!smUp && (
               <Typography variant="body2" align="center" sx={{ mt: 3 }}>

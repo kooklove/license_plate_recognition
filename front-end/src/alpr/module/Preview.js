@@ -49,7 +49,7 @@ export const Preview = (props) => {
             const img = "data:image/jpeg;base64," + m.JPEG;
             setDatauri(img);
           } else if ('PLATE' in m) {
-            console.log("TBD plate");
+            props.onFoundPlate(m.PLATE);
           } else if ('status' in m) {
             if (m.status === 'finished') {
               setIsPlaying(false);

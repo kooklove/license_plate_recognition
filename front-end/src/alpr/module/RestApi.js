@@ -8,7 +8,7 @@ import Iconify from '../../components/Iconify';
 
 const borderColor = 'rgba(245, 220, 145, 0.8)';
 
-export const RestApiComponent = (props) => {
+function RestApiComponent(props) {
   const [protocol,] = useState(props.protocol || 'https:');
   const [host,] = useState(props.host || 'localhost');
   const [port,] = useState(props.port || 3503);
@@ -17,22 +17,23 @@ export const RestApiComponent = (props) => {
   const [msgReceived, setMsgReceived] = useState(undefined);
   const [detectedCarNum, setDetectedCarNum] = useState('LKY1360');  // or try HHF6697
   const [ongoing, setOngoing] = useState(false);
+  const [request, setRequest] = useState(undefined);
 
   const [alert, setAlert] = useState(undefined);
   const [found, setFound] = useState(undefined);
 
   useEffect(() => {
     try {
-      console.log(msgReceived);
       if (msgReceived === undefined) {
         return;
       }
+      console.log(msgReceived);
 
       const messages = JSON.parse(msgReceived);
-      if (messages.length < 1) {
-        setFound(undefined);
-        return;
-      }
+      // if (messages.length < 1) {
+      //   setFound(undefined);
+      //   return;
+      // }
 
       // TODO when multiple
       const m = messages[0];
@@ -50,15 +51,38 @@ export const RestApiComponent = (props) => {
         default:
           break;
       }
-      setFound(m);
+      if (found.plate !== m.plate) {
+        setFound(m);
+      }
     } catch (err) {
       console.error(err);
     }
   }, [msgReceived]);
 
   useEffect(() => {
-    props.keyword && requestToSearch(props.keyword)
-  }, [props.keyword]);
+    // console.log("RestApi", props.request)
+    setRequest(props.request);
+  }, [props.request])
+
+  useEffect(() => {
+    if (request === undefined) {
+      return;
+    }
+    console.log("request", request);
+    switch (request.type) {
+      case 'search':
+        requestToSearch(request.keyword);
+        break;
+      case 'login':
+        requestToLogin(request.login);
+        break;
+      case 'logout':
+        requestToLogout();
+        break;
+      default:
+        break;
+    }
+  }, [request]);
 
   const getBirth = (birth) => {
     return birth;
@@ -114,17 +138,26 @@ export const RestApiComponent = (props) => {
     );
   }
 
-  const getUrl = (api = 'plate') => {
+  const getUrl = (api = 'platenumber') => {
     return protocol + '//' + host + ':' + port + '/' + api
   }
 
   const requestToSearch = async (pnum) => {
-    const url = getUrl();
-    const param = { plateNumber: pnum };
+    console.log("requestToSearch:", pnum);
+    const url = getUrl('platenumber')+ "/" + pnum;
+    const accessToken = localStorage.getItem('accessToken');
+    if (accessToken === undefined) {
+      //TODO !
+    }
+    const header = {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    };
     setOngoing(true);
-    setMsgSent('Post request to ' + url + '  with param: ' + JSON.stringify(param));
+    setMsgSent('GET request to ' + url + '  with param: ' + JSON.stringify(header));
     axios
-      .post(url, param)
+      .get(url, header)
       .then(response => {
         console.log('response', response);
         setOngoing(false);
@@ -135,7 +168,30 @@ export const RestApiComponent = (props) => {
       });
   }
 
-  return (<div style={{ position: 'absolute', top:0, width: '100%', zIndex: 2 }}>
+  const requestToLogin = async (data) => {
+    console.log("requestToLogin");
+    const url = getUrl('login');
+    const param = { id: data.username, pw: data.password };
+    setOngoing(true);
+    setMsgSent('Post request to ' + url + '  with param: ' + JSON.stringify(param));
+    axios
+      .post(url, param)
+      .then(response => {
+        localStorage.setItem('accessToken', response.data.accessToken);
+        localStorage.setItem('refreshToken', response.data.refreshToken);
+        setOngoing(false);
+      })
+      .catch(err => {
+        console.log('err', err);
+      });
+  }
+
+  const requestToLogout = () => {
+    localStorage.setItem('accessToken', undefined);
+    localStorage.setItem('refreshToken', undefined);
+  }
+
+  return (<div style={{ position: 'absolute', top: 0, width: '100%', zIndex: 2 }}>
 
     {found && <>
       <Draggable handle=".handle">
@@ -199,3 +255,5 @@ export const RestApiComponent = (props) => {
     }
   </div>);
 }
+
+export default RestApiComponent;

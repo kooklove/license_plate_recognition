@@ -16,13 +16,26 @@ import DashboardApp from './pages/DashboardApp';
 // ----------------------------------------------------------------------
 
 export default function Router(props) {
-  const [keyword, setKeyword] = useState(undefined);
+  const [request, setRequest] = useState(undefined);
 
-  return useRoutes([ 
+  const onLogin = (data) => {
+    setRequest({ type: 'login', login: { username: data.email, password: data.password } });
+  }
+
+  const onLogout = () => {
+    console.log("Router, logout")
+    setRequest({ type: 'logout' });
+  }
+
+  const onSearch = (key) => {
+    setRequest({ type: 'search', keyword: key });
+  }
+
+  return useRoutes([
     {
       path: '/dashboard',
-      element: <DashboardLayout onKeyword={k => setKeyword(k)} />,
-      children: [{ path: 'app', element: <DashboardApp keyword={keyword} /> },
+      element: <DashboardLayout onSearch={k => onSearch(k)} onLogout={() => onLogout()} />,
+      children: [{ path: 'app', element: <DashboardApp request={request} /> },
       { path: 'user', element: <User /> },
       { path: 'products', element: <Products /> },
       { path: 'blog', element: <Blog /> },
@@ -33,7 +46,7 @@ export default function Router(props) {
       element: <LogoOnlyLayout />,
       children: [
         { path: '/', element: (props.isLoggedIn ? <Navigate to="/dashboard/app" /> : <Navigate to="/login" />) },
-        { path: 'login', element: <Login /> },
+        { path: 'login', element: <Login onLogin={(k) => onLogin(k)} /> },
         { path: 'register', element: <Register /> },
         { path: '404', element: <NotFound /> },
         { path: '*', element: <Navigate to="/404" /> },
