@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
-//import {Schema} from 'mongoose';
-//import mongodb from 'mongodb';
 import levenshtein from 'fast-levenshtein';
+import config from '../conf/config.json' assert {type: "json"};
 
 var result;
 
@@ -64,24 +63,24 @@ db.once('open', function() {
   console.log('Connected!');
 });
 const collections = mongoose.model('platenumber', platenumberSchema);
+const dist_levenshtein = config.max_dist_levenshtein;
+var partial_result = [];
 
 const apiPlate = async (req, res) => {
   try {
-    let distance;
-    var partial_result = [];
-    console.log('[apiPlate] req.body:', req.body);
+    //console.log('[apiPlate] req.body:', req.body);
     const plateNumber = req.body.plateNumber;
-    console.log('[apiPlate] plateNumber: ' + plateNumber);
+    //console.log('[apiPlate] plateNumber: ' + plateNumber);
 
-    let start = new Date();
+    //let start = new Date();
     // exact match
     var result = await collections.find(
       {
         plate: plateNumber  
       }
     );
-    let end = new Date();
-    console.log(`${end - start}ms`)
+    //let end = new Date();
+    //console.log(`${end - start}ms`)
 
     if (result.length)
     {
@@ -90,14 +89,17 @@ const apiPlate = async (req, res) => {
     else //if no match
     {
       let word = plateNumber.substring(0, 3);
-      console.log(word);
+      //console.log(word);
       const query = new RegExp('^'+ word);
       //TODO: partial match
+      let start = new Date();
       var result = await collections.find(
         {
           plate: query
         }
       );
+      let end = new Date();
+      console.log(`${end - start}ms`)
 
       console.log(result.length);
       
@@ -105,8 +107,7 @@ const apiPlate = async (req, res) => {
       {
         for (var i=0;i<result.length;i++)
         {
-          distance = levenshtein.get(plateNumber, result[i].plate);
-          if (distance < 2)
+          if (levenshtein.get(plateNumber, result[i].plate) <= dist_levenshtein)
           {
             partial_result.push(result[i]);
           }
