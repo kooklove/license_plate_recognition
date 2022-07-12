@@ -2,8 +2,6 @@ import mongoose from 'mongoose';
 import levenshtein from 'fast-levenshtein';
 import config from '../conf/config.json' assert {type: "json"};
 
-var result;
-
 const platenumberSchema = new mongoose.Schema({
   plate: {
     required: true,
@@ -65,11 +63,12 @@ db.once('open', function() {
 const collections = mongoose.model('platenumber', platenumberSchema);
 const dist_levenshtein = config.max_dist_levenshtein;
 var partial_result = [];
+var result;
 
 const apiPlate = async (req, res) => {
   try {
-    //console.log('[apiPlate] req.body:', req.body);
-    const plateNumber = req.body.plateNumber;
+    //console.log('[apiPlate] req.params:', req.params.platenumber);
+    const plateNumber = req.params.platenumber;
     //console.log('[apiPlate] plateNumber: ' + plateNumber);
 
     //let start = new Date();
@@ -86,7 +85,7 @@ const apiPlate = async (req, res) => {
     {
       res.json(result);
     }
-    else //if no match
+    else //if no exact match
     {
       let word = plateNumber.substring(0, 3);
       //console.log(word);

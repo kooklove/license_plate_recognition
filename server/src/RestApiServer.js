@@ -125,12 +125,8 @@ export default class RestApiServer {
       return apiPlateFaked(req, res)
     });
 
-    app.post('/plate', (req, res) => {
+    app.get('/platenumber/:platenumber', (req, res) => {
       return apiPlate(req, res)
-    });
-
-    app.post('/platePartial', (req, res) => {
-      return apiPlatePartial(req, res)
     });
 
     const httpServer = http.createServer(app);
