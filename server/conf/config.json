@@ -3,5 +3,6 @@
   "expiration ": 4,
   "confidence" : "~1",
   "rows" : 3,
-  "max_num_of_partial_match":10
+  "max_num_of_partial_match" : 10,
+  "jwt_token_expiration": "4h"
 }

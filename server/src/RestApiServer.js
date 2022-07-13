@@ -15,6 +15,14 @@ import jwt from 'jsonwebtoken';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import {addPerfLog, performanceSummary } from './perfLog.js'
+import { readFile } from 'fs/promises';
+import config from '../conf/config.json' assert {type: "json"};
+
+const jsonconfig = JSON.parse(
+  await readFile(
+    new URL('../conf/config.json', import.meta.url)
+  )
+)
 
 const DEFAULT_PORT_HTTP = 3502;
 const DEFAULT_PORT_HTTPS = 3503;
@@ -35,7 +43,7 @@ export default class RestApiServer {
     // access token을 secret key 기반으로 생성
     const generateAccessToken = (id) => {
       return jwt.sign({ id }, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: process.env.JWS_TOKEN_EXPIRARTION,
+        expiresIn: jsonconfig.jwt_token_expiration
       });
     };
 
