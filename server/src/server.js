@@ -1,4 +1,5 @@
-import RestApiServer from './RestApiServer.js'
+import RestApiServer from './RestApiServer.js';
+import EchoServer from './EchoServer.js';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
@@ -8,6 +9,7 @@ const __dirname = path.dirname(__filename);
 
 const REST_API_PORT_HTTP = 3502;
 const REST_API_PORT_HTTPS = 3503;
+const ECHO_SERVER_PORT = 3505;
 
 function getTLSOption() {
   let options;
@@ -27,6 +29,7 @@ function getTLSOption() {
 }
 
 new RestApiServer(getTLSOption(), REST_API_PORT_HTTP, REST_API_PORT_HTTPS);
+new EchoServer(ECHO_SERVER_PORT);
 
 export { };
 

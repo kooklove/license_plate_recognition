@@ -16,8 +16,17 @@ function Alpr(props) {
   return (
     <div style={{ width: '100%', height: '100%', position: 'relative', border: '0px solid gray' }}>
       <FullScreen handle={handle}>
-        <Preview showDetail={true} fitToWindow={true} onFoundPlate={k => handleFoundPlateNumber(k)} />
-        <RestApiComponent showDetail={true} fitToWindow={true} protocol="https:" port={3503} request={props.request} />
+        <Preview
+          showDetail={true}
+          fitToWindow={true}
+          onFoundPlate={k => handleFoundPlateNumber(k)}
+        />
+        <RestApiComponent
+          showDetail={true}
+          fitToWindow={true}
+          request={props.request}
+        />
+        {/* <RestApiComponent showDetail={true} fitToWindow={true} protocol="https:" port={3503} request={props.request} /> */}
       </FullScreen>
 
       <div style={{ position: 'fixed', bottom: 20, right: 10, zIndex: 9 }}>
