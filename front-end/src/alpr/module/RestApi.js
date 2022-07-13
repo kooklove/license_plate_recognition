@@ -21,7 +21,7 @@ const readStorage = (key, defaultValue = undefined) => {
 
 function RestApiComponent(props) {
   const [protocol, setProtocol] = useState(readStorage('restapi_protocol', 'https:'));
-  const [host, setHost] = useState(readStorage('restapi_host', 'localhost'));
+  const [host, setHost] = useState(readStorage('restapi_host', '10.58.2.34'));
   const [port, setPort] = useState(readStorage('restapi_port', 3503));
 
   const [msgSent, setMsgSent] = useState(undefined);
@@ -30,20 +30,23 @@ function RestApiComponent(props) {
   const [ongoing, setOngoing] = useState(false);
   const [request, setRequest] = useState(undefined);
 
-  const [alertNetwork, setAlertNetwork] = useState(undefined);
+  const [networkFailure, setNetworkFailure] = useState("Ping/echo connecting...");
   const [alert, setAlert] = useState(undefined);
   const [found, setFound] = useState(undefined);
+  const [isPartial, setIsPartial] = useState(false);
+
+  const [hideMenu, setHideMenu] = useState(!props.showDetail);
 
   useEffect(() => {
     const connect = () => {
       var ws = new WebSocket('ws://' + host + ':' + PING_ECHO_PORT);
       ws.onopen = () => {
         console.log("ping/echo connected");
-        setAlertNetwork(undefined);
+        setNetworkFailure(undefined);
       };
       ws.onmessage = (m) => { console.log("ping/echo onmessage", m) };
       ws.onclose = (e) => {
-        setAlertNetwork('WARNING - Network Connection Lost!')
+        setNetworkFailure('WARNING - Network Connection Lost!')
         console.log('network is disconnected', e);
         setTimeout(() => {
           connect();
@@ -66,6 +69,7 @@ function RestApiComponent(props) {
       if (platesFound.length < 1) {
         return;
       }
+      setIsPartial(platesFound.length > 1);
 
       // TODO when multiple
       const m = platesFound[0];
@@ -135,7 +139,7 @@ function RestApiComponent(props) {
         />
         <CardBody>
           <CardTitle tag="h5">
-            {m.plate}
+            {m.plate} {isPartial && '[Partial Match]'}
           </CardTitle>
           <CardSubtitle
             className="mb-2 text-muted"
@@ -176,6 +180,10 @@ function RestApiComponent(props) {
 
   const requestToSearch = async (pnum) => {
     console.log("requestToSearch:", pnum);
+    if (networkFailure) {
+      console.log("ignored - networkFailure");
+      return;
+    }
     const url = getUrl('platenumber') + "/" + pnum;
     const accessToken = localStorage.getItem('accessToken');
     if (accessToken === undefined) {
@@ -202,6 +210,10 @@ function RestApiComponent(props) {
 
   const requestToLogin = async (data) => {
     console.log("requestToLogin");
+    if (networkFailure) {
+      console.log("ignored - networkFailure");
+      return;
+    }
     const url = getUrl('login');
     const param = { id: data.username, pw: data.password };
     setOngoing(true);
@@ -219,6 +231,10 @@ function RestApiComponent(props) {
   }
 
   const requestToLogout = () => {
+    if (networkFailure) {
+      console.log("ignored - networkFailure");
+      return;
+    }
     localStorage.setItem('accessToken', undefined);
     localStorage.setItem('refreshToken', undefined);
   }
@@ -252,12 +268,17 @@ function RestApiComponent(props) {
     </>
     }
 
-    {props.showDetail &&
+    {(props.showDetail && !hideMenu) &&
       <Draggable>
         <div style={
           // props.fitToWindow ?
           // { position: 'fixed', top: 0, right: 0, margin: '1em', width: '450px', padding: '2em', borderRadius: '25px', background: 'rgba(255,255,255,0.7)' } :
           { position: 'absolute', bottop: 0, right: 0, width: '40%', padding: '2em', background: 'rgba(221, 211, 242, 0.7)', borderRadius: '25px', fontSize: '0.8em' }}>
+          <div style={{ position: 'absolute', right: 0, top: 0 }}>
+            <IconButton onClick={() => setHideMenu(true)}>
+              <Iconify icon="ant-design:close-circle-filled" />
+            </IconButton>
+          </div>
           <h5>REST Communication</h5>
           <p>{protocol + '//' + host + ':' + port}</p>
           <UncontrolledAccordion stayOpen={true} defaultOpen={["1"]}>
@@ -323,14 +344,15 @@ function RestApiComponent(props) {
       </Draggable>
     }
 
-    {(alert || alertNetwork) &&
-      <div style={{ position: 'fixed', top: '20%', width: '80%', zIndex: 3 }}>
+    {
+      (alert || networkFailure) &&
+      <div style={{ position: 'fixed', top: '20%', width: '60%', zIndex: 3 }}>
         {alert && <UncontrolledAlert color="danger">{alert}</UncontrolledAlert>}
-        {alertNetwork && <UncontrolledAlert color="danger">{alertNetwork}</UncontrolledAlert>}
+        {networkFailure && <UncontrolledAlert color="danger">{networkFailure}</UncontrolledAlert>}
       </div>
     }
 
-  </div>);
+  </div >);
 }
 
 export default RestApiComponent;

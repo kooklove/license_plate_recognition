@@ -4,9 +4,10 @@ import { Preview } from './module/Preview';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { IconButton } from '@mui/material';
 import Iconify from '../components/Iconify';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-function Alpr(props) {
+function Alpr() {
+  const [request, setRequest] = useState(undefined);
   const handle = useFullScreenHandle();
 
   const handleFoundPlateNumber = (keyword) => {
@@ -24,7 +25,7 @@ function Alpr(props) {
         <RestApiComponent
           showDetail={true}
           fitToWindow={true}
-          request={props.request}
+          request={request}
         />
         {/* <RestApiComponent showDetail={true} fitToWindow={true} protocol="https:" port={3503} request={props.request} /> */}
       </FullScreen>

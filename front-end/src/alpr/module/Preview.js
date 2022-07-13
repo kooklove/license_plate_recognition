@@ -1,8 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react';
-import { Badge, Button, Input, InputGroup, InputGroupText } from 'reactstrap';
-
-let ws;
+import { useEffect, useState, useRef } from 'react';
+import { Badge, Button, Input, InputGroup, InputGroupText, Spinner } from 'reactstrap';
 
 const DEFAULT_BASEDIR = 'F:\\22_SWARCH_PROJECT\\'; // 'C:\\swarchi\\license_plate_recognition\\video\\';
 
@@ -19,7 +17,10 @@ export const Preview = (props) => {
 	const [interval, setInterval] = useState(10);
 
 	const [isPlaying, setIsPlaying] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 	const [log, setLog] = useState(undefined);
+
+	const ws = useRef(null);
 
 	useEffect(() => {
 		if (baseDir !== undefined) {
@@ -29,19 +30,19 @@ export const Preview = (props) => {
 
 	useEffect(() => {
 		const connect = () => {
-			ws = new WebSocket(getUrl());
-			ws.onopen = () => {
+			ws.current = new WebSocket(getUrl());
+			ws.current.onopen = () => {
 				console.log("connected!!");
 				setIsConnected(true);
 			};
-			ws.onclose = () => {
+			ws.current.onclose = () => {
 				console.log("disconnected!!");
 				setIsConnected(false);
 				setTimeout(() => {
 					connect();
 				}, 1000);
 			}
-			ws.onmessage = message => {
+			ws.current.onmessage = message => {
 				// console.log(message)
 				try {
 					const m = JSON.parse(message.data);
@@ -49,6 +50,7 @@ export const Preview = (props) => {
 						const img = "data:image/jpeg;base64," + m.JPEG;
 						setDatauri(img);
 					} else if ('PLATE' in m) {
+						console.log('found plate', m.PLATE);
 						props.onFoundPlate(m.PLATE);
 					} else if ('status' in m) {
 						if (m.status === 'finished') {
@@ -62,6 +64,13 @@ export const Preview = (props) => {
 		}
 		connect();
 	}, []);
+
+	useEffect(() => {
+		if (datauri !== undefined) {
+			isLoading && setIsLoading(false);
+			!isPlaying && setIsPlaying(true);
+		}
+	}, [datauri]);
 
 	const reconnect = () => {
 		alert("TBD: reconnect");
@@ -78,21 +87,21 @@ export const Preview = (props) => {
 				filepath: ("FILE:" + baseDir + video + '.avi')
 			}
 		const s = JSON.stringify(param);
+		setIsLoading(!isPlaying);
 		setIsPlaying(!isPlaying);
-		ws.send(s);
+		ws.current.send(s);
 		setLog("Request: " + (param.request + (isPlaying ? "" : " | " + interval + " | " + video)));
 	}
 
 	const getInfo = () => {
-		return (isConnected ? "Connected to " : "★Disconnected to ") + getUrl();
+		return (isConnected ? "ALPR engine is ready [Connected to " : "★ALPR engine is unavailable [Disconnected from ") + getUrl() + "]";
 	}
 
 	return (
 		<div style={{ position: 'relative', width: '100%', zIndex: 0 }} >
 
-
 			<div style={props.fitToWindow ?
-				{ position: 'absolute', margin: '1em', width: '450px', padding: '2em', borderRadius: '25px', background: 'rgba(255,255,255,0.7)', zIndex: 1 } :
+				{ position: 'absolute', margin: '1em', width: '500px', padding: '2em', borderRadius: '25px', background: 'rgba(255,255,255,0.7)', zIndex: 1 } :
 				{ float: 'left', width: '40%', padding: '2em', zIndex: 1 }}>
 				{props.showDetail && <>
 					<Badge
@@ -132,7 +141,7 @@ export const Preview = (props) => {
 				}
 				<InputGroup size="sm" style={{ marginBottom: '1em' }}>
 					<InputGroupText >
-						Path
+						Filepath
 					</InputGroupText>
 					<Input
 						id="selectVideoPath"
@@ -144,7 +153,7 @@ export const Preview = (props) => {
 				</InputGroup>
 				<InputGroup size="sm" style={{ marginBottom: '1em' }}>
 					<InputGroupText >
-						Interval
+						Preview Interval
 					</InputGroupText>
 					<Input
 						id="interval"
@@ -173,9 +182,12 @@ export const Preview = (props) => {
 					<Button onClick={() => sendRequest()} color="primary">{isPlaying ? 'Cancel' : 'Play'}</Button>
 				</InputGroup>
 				{props.showDetail &&
-					<><p style={{ marginTop: '1em', fontSize: "0.8em" }}>{log && log}</p>
+					<>
+						<p style={{ marginTop: '1em', fontSize: "0.8em" }}>{log && log}</p>
 						{props.fitToWindow || <Badge style={{ width: 'fit-content' }} color="warning">←image received</Badge>}
-					</>}
+					</>
+				}
+				{(isLoading === true) && <h6 style={{ color: 'red' }}><Spinner /> Waiting for loading video...</h6>}
 			</div>
 
 			<div style={props.fitToWindow ? { position: 'relative', width: '100%' } : { float: 'left', width: '50%' }} >
