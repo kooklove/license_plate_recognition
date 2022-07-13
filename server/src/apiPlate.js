@@ -2,6 +2,8 @@ import mongoose from 'mongoose';
 import levenshtein from 'fast-levenshtein';
 import config from '../conf/config.json' assert {type: "json"};
 
+const FIND_TIME_OUT = 500;
+
 const platenumberSchema = new mongoose.Schema({
   plate: {
     required: true,
@@ -62,14 +64,12 @@ db.once('open', function() {
 });
 const collections = mongoose.model('platenumber', platenumberSchema);
 const dist_levenshtein = config.max_dist_levenshtein;
-
+const max_num_of_partial_match = config.max_num_of_partial_match;
 
 const apiPlate = async (req, res) => {
   var result;
   try {
-    //console.log('[apiPlate] req.params:', req.params.platenumber);
     const plateNumber = req.params.platenumber;
-    //console.log('[apiPlate] plateNumber: ' + plateNumber);
 
     //let start = new Date();
     // exact match
@@ -88,7 +88,32 @@ const apiPlate = async (req, res) => {
     else //if no exact match
     {
       var partial_result = [];
-      let word = plateNumber.substring(0, 3);
+      let word, number;
+      var result;
+
+      //console.log(plateNumber.length)
+
+      word = plateNumber.substr(0, 3);
+      console.log(word);
+
+      if (/^[a-zA-Z]+$/.test(word)) //앞에 3자리가 문자이면 partial match수행
+      {
+        const query = new RegExp('^'+ word);
+        let start = new Date();
+        result = await collections.find(
+          {
+            plate: query
+          }
+        ).maxTime(FIND_TIME_OUT);
+        let end = new Date();
+        console.log(`${end - start}ms`)
+      }
+      else
+      {
+        result = []
+      }
+
+      /*
       //console.log(word);
       const query = new RegExp('^'+ word);
       //TODO: partial match
@@ -102,7 +127,8 @@ const apiPlate = async (req, res) => {
       console.log(`${end - start}ms`)
 
       console.log(result.length);
-      
+      */
+
       if (result.length)
       {
         for (var i=0;i<result.length;i++)
@@ -113,22 +139,26 @@ const apiPlate = async (req, res) => {
           }
         }
         console.log(partial_result.length);
-        res.json(partial_result);
+        if (partial_result.length > max_num_of_partial_match)
+        {
+          res.json(partial_result.slice(0,max_num_of_partial_match));
+        }
+        else
+        {
+          res.json(partial_result);
+        }
       }
       else
       {
         res.json(result);
       }
-      
     }
-
     //console.log(result);
     //res.json(JSON.stringify(result));
   } catch (err) {
     console.error(err);
     res.status(500);        //sending failure to the client
   } finally {
-    //await prisma.$disconnect();
   }
 }
 
