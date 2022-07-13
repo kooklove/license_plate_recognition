@@ -1,5 +1,6 @@
-import config from '../conf/config.json' assert {type: "json"};
 import http from 'http'
+import fs from 'fs';
+const config = JSON.parse(fs.readFileSync('conf/config.json'));
 
 const query_items = '&fl=plate,status,registration,ownerName,ownerBirth,ownerAddress,ownerCity,vehicleYear,vehicleMaker,vehicleModel,vehicleColor';
 

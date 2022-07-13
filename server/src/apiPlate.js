@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import levenshtein from 'fast-levenshtein';
-import config from '../conf/config.json' assert {type: "json"};
+import fs from 'fs';
+const config = JSON.parse(fs.readFileSync('conf/config.json'));
 
 const FIND_TIME_OUT = 500;
 
@@ -62,7 +63,7 @@ db.on('error', function(){
 db.once('open', function() {
   console.log('Connected!');
 });
-const collections = mongoose.model('platenumber', platenumberSchema);
+const collections = mongoose.model('new_platenumber', platenumberSchema);
 const dist_levenshtein = config.max_dist_levenshtein;
 const max_num_of_partial_match = config.max_num_of_partial_match;
 
@@ -84,6 +85,8 @@ const apiPlate = async (req, res) => {
     if (result.length)
     {
       res.json(result);
+      console.log('exact match '+ plateNumber)
+      res.result='exact';
     }
     else //if no exact match
     {
@@ -94,19 +97,20 @@ const apiPlate = async (req, res) => {
       //console.log(plateNumber.length)
 
       word = plateNumber.substr(0, 3);
-      console.log(word);
 
       if (/^[a-zA-Z]+$/.test(word)) //앞에 3자리가 문자이면 partial match수행
       {
         const query = new RegExp('^'+ word);
-        let start = new Date();
-        result = await collections.find(
-          {
-            plate: query
+        try {
+          result = await collections.find(
+            {
+              plate: query
+            }
+            ).maxTime(FIND_TIME_OUT);
+          } catch (err) {
+            console.log('Search Timeout '+ FIND_TIME_OUT+'ms');
+            res.json(result);
           }
-        ).maxTime(FIND_TIME_OUT);
-        let end = new Date();
-        console.log(`${end - start}ms`)
       }
       else
       {
@@ -138,7 +142,8 @@ const apiPlate = async (req, res) => {
             partial_result.push(result[i]);
           }
         }
-        console.log(partial_result.length);
+        console.log('partial match '+partial_result.length);
+        res.result='partial';
         if (partial_result.length > max_num_of_partial_match)
         {
           res.json(partial_result.slice(0,max_num_of_partial_match));
@@ -151,6 +156,8 @@ const apiPlate = async (req, res) => {
       else
       {
         res.json(result);
+        console.log('no match');
+        res.result='no';
       }
     }
     //console.log(result);
