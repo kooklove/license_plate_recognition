@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Navigate, useRoutes } from 'react-router-dom';
 // layouts
 import DashboardLayout from './layouts/dashboard';
+import SideOnlyLayout from './layouts/dashboard/SideOnlyLayout';
 import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 //
 import Blog from './pages/Blog';
@@ -38,7 +39,6 @@ export default function Router(props) {
       element: <DashboardLayout onSearch={k => onSearch(k)} onLogout={() => onLogout()} />,
       children: [{ path: 'app', element: <DashboardApp request={request} /> },
       { path: 'user', element: <User /> },
-      { path: 'server', element: <Server /> },
       { path: 'products', element: <Products /> },
       { path: 'blog', element: <Blog /> },
       ],
@@ -48,11 +48,17 @@ export default function Router(props) {
       element: <LogoOnlyLayout />,
       children: [
         { path: '/', element: (props.isLoggedIn ? <Navigate to="/dashboard/app" /> : <Navigate to="/login" />) },
-        { path: '/server', element: <Navigate to="/dashboard/server" /> },
         { path: 'login', element: <Login onLogin={(k) => onLogin(k)} /> },
         { path: 'register', element: <Register /> },
         { path: '404', element: <NotFound /> },
         { path: '*', element: <Navigate to="/404" /> },
+      ],
+    },
+    {
+      path: '/server',
+      element: <SideOnlyLayout />,
+      children: [
+        { path: '/server', element: <Server /> },
       ],
     },
     { path: '*', element: <Navigate to="/404" replace /> },
