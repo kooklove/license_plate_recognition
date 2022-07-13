@@ -14,7 +14,7 @@ import https from 'https';
 import jwt from 'jsonwebtoken';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
-
+import {addPerfLog, performanceSummary } from './perfLog.js'
 
 const DEFAULT_PORT_HTTP = 3502;
 const DEFAULT_PORT_HTTPS = 3503;
@@ -89,6 +89,14 @@ export default class RestApiServer {
       });
     };
 
+    // add performance Log
+    const addPerformanceLog = (req, res, next) => {
+      next();
+      //TODO EXAMPLE
+      addPerfLog( req.user.id, 'LMY1285', new Date().getTime(),new Date().getTime(), 'exact' );
+    };
+
+
     // access token을 refresh token 기반으로 재발급
     app.post("/refresh", (req, res) => {
       let refreshToken = req.body.refreshToken;
@@ -107,12 +115,17 @@ export default class RestApiServer {
       );
     });
 
-    app.post('/plateFaked',authenticateAccessToken, (req, res) => {
+    app.post('/plateFaked',authenticateAccessToken, addPerformanceLog, (req, res) => {
       return apiPlateFaked(req, res)
     });
 
     app.get('/platenumber/:platenumber', (req, res) => {
       return apiPlate(req, res)
+    });
+
+    app.get('/performance', (req, res) => {
+      var perflog = performanceSummary();
+      return  res.json(perflog);
     });
 
     const httpServer = http.createServer(app);
