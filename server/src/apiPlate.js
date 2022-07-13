@@ -67,7 +67,7 @@ const collections = mongoose.model('new_platenumber', platenumberSchema);
 const dist_levenshtein = config.max_dist_levenshtein;
 const max_num_of_partial_match = config.max_num_of_partial_match;
 
-const apiPlate = async (req, res) => {
+const apiPlate = async (req, res, logfn) => {
   var result;
   try {
     const plateNumber = req.params.platenumber;
@@ -86,7 +86,8 @@ const apiPlate = async (req, res) => {
     {
       res.json(result);
       console.log('exact match '+ plateNumber)
-      res.result='exact';
+      console.log(req.user)
+      logfn( req.user.id, req.params.platenumber, new Date().getTime(),new Date().getTime(), 'exact' );
     }
     else //if no exact match
     {
@@ -143,7 +144,7 @@ const apiPlate = async (req, res) => {
           }
         }
         console.log('partial match '+partial_result.length);
-        res.result='partial';
+        logfn( req.user.id, req.params.platenumber, new Date().getTime(),new Date().getTime(), 'partial' );
         if (partial_result.length > max_num_of_partial_match)
         {
           res.json(partial_result.slice(0,max_num_of_partial_match));
@@ -157,7 +158,7 @@ const apiPlate = async (req, res) => {
       {
         res.json(result);
         console.log('no match');
-        res.result='no';
+        logfn( req.user.id, req.params.platenumber, new Date().getTime(),new Date().getTime(), 'no' );
       }
     }
     //console.log(result);

@@ -16,7 +16,6 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import {addPerfLog, performanceSummary } from './perfLog.js'
 import { readFile } from 'fs/promises';
-import config from '../conf/config.json' assert {type: "json"};
 
 const jsonconfig = JSON.parse(
   await readFile(
@@ -127,8 +126,8 @@ export default class RestApiServer {
       return apiPlateFaked(req, res)
     });
 
-    app.get('/platenumber/:platenumber', (req, res) => {
-      return apiPlate(req, res)
+    app.get('/platenumber/:platenumber', authenticateAccessToken, (req, res) => {
+      return apiPlate(req, res, addPerfLog)
     });
 
     app.get('/performance', (req, res) => {
