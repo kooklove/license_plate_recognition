@@ -72,7 +72,7 @@ const apiPlate = async (req, res, logfn) => {
   try {
     const plateNumber = req.params.platenumber;
 
-    //let start = new Date();
+    let start = new Date();
     // exact match
     var result = await collections.find(
       {
@@ -85,9 +85,8 @@ const apiPlate = async (req, res, logfn) => {
     if (result.length)
     {
       res.json(result);
-      console.log('exact match '+ plateNumber)
-      console.log(req.user)
-      logfn( req.user.id, req.params.platenumber, new Date().getTime(),new Date().getTime(), 'exact' );
+      console.log(req.user.id+' exact match')
+      logfn(req.user.id, req.params.platenumber, start, new Date().getTime(), 'exact');
     }
     else //if no exact match
     {
@@ -109,8 +108,9 @@ const apiPlate = async (req, res, logfn) => {
             }
             ).maxTime(FIND_TIME_OUT);
           } catch (err) {
-            console.log('Search Timeout '+ FIND_TIME_OUT+'ms');
             res.json(result);
+            console.log(req.user.id+' Search Timeout');
+            logfn( req.user.id, req.params.platenumber, start, new Date().getTime(), 'timeout');
           }
       }
       else
@@ -143,8 +143,6 @@ const apiPlate = async (req, res, logfn) => {
             partial_result.push(result[i]);
           }
         }
-        console.log('partial match '+partial_result.length);
-        logfn( req.user.id, req.params.platenumber, new Date().getTime(),new Date().getTime(), 'partial' );
         if (partial_result.length > max_num_of_partial_match)
         {
           res.json(partial_result.slice(0,max_num_of_partial_match));
@@ -153,12 +151,14 @@ const apiPlate = async (req, res, logfn) => {
         {
           res.json(partial_result);
         }
+        console.log(req.user.id+' partial match '+partial_result.length);
+        logfn( req.user.id, req.params.platenumber, start, new Date().getTime(), 'partial');
       }
       else
       {
         res.json(result);
-        console.log('no match');
-        logfn( req.user.id, req.params.platenumber, new Date().getTime(),new Date().getTime(), 'no' );
+        console.log(req.user.id+' no match');
+        logfn( req.user.id, req.params.platenumber, start, new Date().getTime(), 'no');
       }
     }
     //console.log(result);
@@ -177,7 +177,8 @@ const apiPlatePartial = async (req, res) => {
     const plateNumber = req.body.plateNumber;
     console.log('[apiPlatePartial] plateNumber: ' + plateNumber);
 
-    /* CASE1 : 1000개당 약 2.5초 소요 (사용불가)
+    /*
+    // CASE1 : 1000개당 약 2.5초 소요 (사용불가)
     let start, end;
     let distance;
     start = new Date();
@@ -204,7 +205,9 @@ const apiPlatePartial = async (req, res) => {
     */
 
 
-    /* //CASE4 : 3000개당 약 850ms 소요 (사용불가) 
+    /*
+     //CASE2 : 3000개당 약 850ms 소요 (사용불가)
+
     const result = await prisma.$queryRaw
     `SELECT * FROM platenumber WHERE levenshtein(plate, ${plateNumber})
     BETWEEN 1 AND 2;`
@@ -214,7 +217,6 @@ const apiPlatePartial = async (req, res) => {
     const result = await prisma.$queryRaw
     `SELECT * FROM platenumber WHERE plate LIKE "LKY136%"`; //수십ms 소요
     */
-   
 
     /* contains 사용 50여초 소요 (사용불가)
     const result = await prisma.plateNumber.findMany({
