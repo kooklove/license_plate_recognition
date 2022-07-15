@@ -167,7 +167,8 @@ export default function Server() {
 		console.log("requestToPerformanceMetric");
 		axios
 			// .get('https://10.58.2.34:3503/performance')
-			.get('https://localhost:3503/performance')
+			.get('https://10.58.2.34:3503/performance')
+			// .get('https://localhost:3503/performance')
 			.then(response => {
 				console.log(response);
 				setUserlist(USER_LIST);
@@ -176,7 +177,6 @@ export default function Server() {
 				console.log('err', err);
 			});
 	}
-
 
 	return (<>
 		{userlist &&

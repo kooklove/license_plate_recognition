@@ -1,12 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable prefer-template */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-case-declarations */
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Badge, Button, Card, CardBody, CardImg, CardTitle, CardSubtitle, Input, InputGroup, Spinner, UncontrolledAlert, Row, Col, UncontrolledAccordion, AccordionItem, AccordionHeader, AccordionBody, InputGroupText } from 'reactstrap';
 import Draggable from 'react-draggable';
 import { IconButton } from '@mui/material';
-import Iconify from '../../components/Iconify';
+import Iconify from '../../../components/Iconify';
 
 const BORDER_COLOR = 'rgba(245, 220, 145, 0.8)';
+
+const HTTPS_PORT = 3503;
 const PING_ECHO_PORT = 3505;
 const PING_ECHO_INTERVAL_MS = 1000;
 
@@ -22,7 +27,7 @@ const readStorage = (key, defaultValue = undefined) => {
 function RestApiComponent(props) {
   const [protocol, setProtocol] = useState(readStorage('restapi_protocol', 'https:'));
   const [host, setHost] = useState(readStorage('restapi_host', '10.58.2.34'));
-  const [port, setPort] = useState(readStorage('restapi_port', 3503));
+  const [port, setPort] = useState(readStorage('restapi_port', HTTPS_PORT));
 
   const [msgSent, setMsgSent] = useState(undefined);
   const [platesFound, setPlatesFound] = useState(undefined);
@@ -39,7 +44,7 @@ function RestApiComponent(props) {
 
   useEffect(() => {
     const connect = () => {
-      var ws = new WebSocket('ws://' + host + ':' + PING_ECHO_PORT);
+      const ws = new WebSocket('ws://' + host + ':' + PING_ECHO_PORT);
       ws.onopen = () => {
         console.log("ping/echo connected");
         setNetworkFailure(undefined);
@@ -181,13 +186,13 @@ function RestApiComponent(props) {
   const requestToSearch = async (pnum) => {
     console.log("requestToSearch:", pnum);
     if (networkFailure) {
-      console.log("ignored - networkFailure");
+      console.log("ignored - networkFailure", networkFailure);
       return;
     }
     const url = getUrl('platenumber') + "/" + pnum;
     const accessToken = localStorage.getItem('accessToken');
     if (accessToken === undefined) {
-      //TODO !
+      // TODO !
     }
     const header = {
       headers: {
@@ -195,7 +200,11 @@ function RestApiComponent(props) {
       }
     };
     setOngoing(true);
-    setMsgSent('GET request to ' + url + '  with param: ' + JSON.stringify(header));
+
+    const s = 'GET request to ' + url + '  with param: ' + JSON.stringify(header);
+    console.log(s);
+    setMsgSent(s);
+
     axios
       .get(url, header)
       .then(response => {
@@ -204,23 +213,41 @@ function RestApiComponent(props) {
         response.data && setPlatesFound(response.data);
       })
       .catch(err => {
-        console.log('err', err);
+        console.log('error', err);
+        if (err && err.response) {
+          switch (err.response.status) {
+            case 403:
+              const s = "WARNING! You must allow private access as follows: \n\nPlease open https://" + window.location.hostname + ":" + port
+                + "\nand click <Advanced> to proceed the unsafe site."
+                + "\n\nRequired only once at the very beginning \nand this is because of the self-signed certificate."
+                + "\n\nOK to open URL."
+              if (window.confirm(s)) {
+                window.location.href = 'https://' + window.location.hostname + ":" + port;
+              };
+              window.alert()
+              break;
+            default:
+              break;
+          }
+        }
       });
   }
 
   const requestToLogin = async (data) => {
     console.log("requestToLogin");
     if (networkFailure) {
-      console.log("ignored - networkFailure");
+      console.log("ignored - networkFailure", networkFailure);
       return;
     }
     const url = getUrl('login');
     const param = { id: data.username, pw: data.password };
     setOngoing(true);
-    setMsgSent('Post request to ' + url + '  with param: ' + JSON.stringify(param));
+    setMsgSent("login requested");
+
     axios
       .post(url, param)
       .then(response => {
+        console.log('response');
         localStorage.setItem('accessToken', response.data.accessToken);
         localStorage.setItem('refreshToken', response.data.refreshToken);
         setOngoing(false);
@@ -281,7 +308,7 @@ function RestApiComponent(props) {
           </div>
           <h5>REST Communication</h5>
           <p>{protocol + '//' + host + ':' + port}</p>
-          <UncontrolledAccordion stayOpen={true} defaultOpen={["1"]}>
+          <UncontrolledAccordion stayOpen defaultOpen={["1"]}>
             <AccordionItem>
               <AccordionHeader targetId="1">
                 Log

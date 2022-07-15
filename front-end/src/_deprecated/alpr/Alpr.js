@@ -1,18 +1,25 @@
-import { FullScreen, useFullScreenHandle } from "react-full-screen";
-import RestApiComponent from './module/RestApi';
-import { Preview } from './module/Preview';
-import 'bootstrap/dist/css/bootstrap.min.css';
+/* eslint-disable object-shorthand */
+/* eslint-disable react/jsx-boolean-value */
 import { IconButton } from '@mui/material';
-import Iconify from '../components/Iconify';
-import { useState } from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { useEffect, useState } from "react";
+import { FullScreen, useFullScreenHandle } from "react-full-screen";
+import Iconify from '../../components/Iconify';
+import { Preview } from './module/PreviewV1';
+import RestApiComponent from './module/RestApiV1';
 
-function Alpr() {
+function Alpr(props) {
   const [request, setRequest] = useState(undefined);
   const handle = useFullScreenHandle();
 
-  const handleFoundPlateNumber = (keyword) => {
+  function handleFoundPlateNumber(keyword){
     setRequest({ type: 'search', keyword: keyword });
   }
+
+  useEffect(() => {
+    console.log("props.request", request);
+    setRequest(props.request);
+  }, [props.request])
 
   return (
     <div style={{ width: '100%', height: '100%', position: 'relative', border: '0px solid gray' }}>
@@ -20,14 +27,13 @@ function Alpr() {
         <Preview
           showDetail={true}
           fitToWindow={true}
-          onFoundPlate={k => handleFoundPlateNumber(k)}
+          onFoundPlate={keyword => handleFoundPlateNumber(keyword)}
         />
         <RestApiComponent
           showDetail={true}
           fitToWindow={true}
           request={request}
         />
-        {/* <RestApiComponent showDetail={true} fitToWindow={true} protocol="https:" port={3503} request={props.request} /> */}
       </FullScreen>
 
       <div style={{ position: 'fixed', bottom: 20, right: 10, zIndex: 9 }}>

@@ -25,6 +25,14 @@ export default function Router({ onRequest }) {
   const [request, setRequest] = useState(undefined);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  const cbLogin = (data) => {
+    if (USE_MMVC) {
+      onRequest({ type: 'login', login: { username: data.email, password: data.password } });
+    } else {
+      setRequest({ type: 'login', login: { username: data.email, password: data.password } });
+    }
+  }
+
   const cbLogout = () => {
     if (USE_MMVC) {
       onRequest({ type: 'logout' });
@@ -56,7 +64,7 @@ export default function Router({ onRequest }) {
       element: <LogoOnlyLayout />,
       children: [
         { path: '/', element: (isLoggedIn ? <Navigate to="/dashboard/app" /> : <Navigate to="/login" />) },
-        { path: 'login', element: <Login /> },
+        { path: 'login', element: <Login onLogin={(k) => cbLogin(k)} /> },
         { path: 'register', element: <Register /> },
         { path: '404', element: <NotFound /> },
         { path: '*', element: <Navigate to="/404" /> },
@@ -66,7 +74,7 @@ export default function Router({ onRequest }) {
       path: '/server',
       element: <LogoOnlyLayout />,
       children: [
-        { path: 'server', element: <Server /> },
+        { path: '/server', element: <Server /> },
       ],
     },
     { path: '*', element: <Navigate to="/404" replace /> },

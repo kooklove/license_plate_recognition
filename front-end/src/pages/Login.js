@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import { useContext } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
@@ -11,6 +11,7 @@ import Logo from '../components/Logo';
 // sections
 import { LoginForm } from '../sections/auth/login';
 import AuthSocial from '../sections/auth/AuthSocial';
+import { LoginContextStore } from '../model/LoginContext';
 
 // ----------------------------------------------------------------------
 
@@ -55,16 +56,17 @@ const ContentStyle = styled('div')(({ theme }) => ({
   padding: theme.spacing(12, 0),
 }));
 
-Login.propTypes = {
-  onLogin: PropTypes.func,
-};
 // ----------------------------------------------------------------------
 
-export default function Login(props) {
+export default function Login() {
+  const { setLoginInfo } = useContext(LoginContextStore);
   const smUp = useResponsive('up', 'sm');
-
   const mdUp = useResponsive('up', 'md');
 
+  const onLogin = (data) => {
+    console.log("onLogin", data);
+    setLoginInfo({ id: data.email, pw: data.password });
+  }
   return (
     <Page title="Login">
       <RootStyle>
@@ -100,7 +102,7 @@ export default function Login(props) {
 
             <AuthSocial />
 
-            <LoginForm onLogin={props.onLogin} />
+            <LoginForm onLogin={onLogin} />
 
             {!smUp && (
               <Typography variant="body2" align="center" sx={{ mt: 3 }}>

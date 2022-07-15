@@ -1,4 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable prefer-template */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable jsx-a11y/alt-text */ 
+/* eslint-disable react/prop-types */ 
+/* eslint-disable no-alert */ 
+/* eslint-disable arrow-body-style */ 
 import { useEffect, useState, useRef } from 'react';
 import { Badge, Button, Input, InputGroup, InputGroupText, Spinner } from 'reactstrap';
 

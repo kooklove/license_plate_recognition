@@ -1,10 +1,6 @@
+import { Box, Card, CardHeader } from '@mui/material';
 import PropTypes from 'prop-types';
-
-// @mui
-import { Card, CardHeader, Box } from '@mui/material';
-
-import Alpr from '../../../alpr/Alpr';
-
+import AlprModel from '../../../model/AlprModel';
 // ----------------------------------------------------------------------
 
 AppAlpr.propTypes = {
@@ -14,12 +10,12 @@ AppAlpr.propTypes = {
 };
 
 export default function AppAlpr({ title, subheader, request, ...other }) {
-  return (
+  return (<>
     <Card {...other} style={{ border: '0px solid green', height: '100%' }}>
       <CardHeader title={title} subheader={subheader} />
       <Box sx={{ p: 3, pb: 1 }} dir="ltr" style={{ border: '0px solid red', height: '100%' }}>
-        <Alpr request={request} />
+        <AlprModel request={request} showDetail />
       </Box>
     </Card>
-  );
+  </>);
 }
