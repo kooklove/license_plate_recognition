@@ -6,9 +6,9 @@ import { useEffect, useState } from 'react';
 
 // material
 import {
-	Avatar, Card, Checkbox, Container, Stack, Table, TableBody,
+	Avatar, Button, Card, Checkbox, Container, Stack, Table, TableBody,
 	TableCell, TableContainer,
-	TablePagination, TableRow, Typography
+	TablePagination, TableRow, Typography, Box
 } from '@mui/material';
 // components
 import Page from '../components/Page';
@@ -16,6 +16,8 @@ import Scrollbar from '../components/Scrollbar';
 import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 // mock
+import Iconify from '../components/Iconify';
+
 
 const USER_LIST = [
 	{
@@ -108,13 +110,18 @@ export default function Server() {
 	const [selected, setSelected] = useState([]);
 	const [orderBy, setOrderBy] = useState('name');
 	const [filterName, setFilterName] = useState('');
-	const [rowsPerPage, setRowsPerPage] = useState(5);
+	const [rowsPerPage, setRowsPerPage] = useState(10);
 
 	const [emptyRows, setEmptyRows] = useState(0);
 	const [filteredUsers, setFilteredUsers] = useState(undefined);
 	const [isUserNotFound, setIsUserNotFound] = useState(false);
 
+	const [lastUpdated, setLastUpdated] = useState(undefined);
+
 	useEffect(() => {
+		const today = new Date(+new Date() + 3240 * 10000).toISOString().replace("T", " ").replace(/\..*/, '');
+		setLastUpdated(today);
+
 		requestToPerformanceMetric();
 	}, []);
 
@@ -218,6 +225,14 @@ export default function Server() {
 						<UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
 						<Scrollbar>
+							<Box sx={{ p: 1, textAlign: 'right' }}>
+								<p style={{ margin: '1em', fontSize: '0.8em' }}>Last updated: {lastUpdated} (for 30 mins)</p>
+								<Button size="small" color="inherit"
+									onClick={() => window.location.reload()}
+									endIcon={<Iconify icon={'el:refresh'} />}>
+									Refresh
+								</Button>
+							</Box>
 
 							<TableContainer sx={{ minWidth: 800 }}>
 								<Table>
