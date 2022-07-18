@@ -12,6 +12,7 @@ import NotFound from './pages/Page404';
 import Register from './pages/Register';
 import Products from './pages/Products';
 import DashboardApp from './pages/DashboardApp';
+import SideOnlyLayout from './layouts/dashboard/SideOnlyLayout';
 
 // ----------------------------------------------------------------------
 
@@ -41,9 +42,9 @@ export default function Router() {
     },
     {
       path: '/server',
-      element: <LogoOnlyLayout />,
+      element: <SideOnlyLayout />,
       children: [
-        { path: 'server', element: <Server /> },
+        { path: '', element: <Server /> },
       ],
     },
     { path: '*', element: <Navigate to="/404" replace /> },

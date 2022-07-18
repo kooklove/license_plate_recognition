@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable camelcase */
 import axios from 'axios';
 import { filter } from 'lodash';
 import { useEffect, useState } from 'react';
@@ -50,12 +51,21 @@ const USER_LIST = [
 
 // ----------------------------------------------------------------------
 
+// const TABLE_HEAD = [
+// 	{ id: 'id', label: 'User ID', alignRight: false },
+// 	{ id: 'numTotalQuery', label: '#Queries', alignRight: false },
+// 	{ id: 'numExactMatch', label: '#Exact natch', alignRight: false },
+// 	{ id: 'numPartialMatch', label: '#Partial match', alignRight: false },
+// 	{ id: 'numNoMatch', label: '#No match', alignRight: false },
+// 	{ id: '' },
+// ];
+
 const TABLE_HEAD = [
 	{ id: 'id', label: 'User ID', alignRight: false },
-	{ id: 'numTotalQuery', label: '#Queries', alignRight: false },
-	{ id: 'numExactMatch', label: '#Exact natch', alignRight: false },
-	{ id: 'numPartialMatch', label: '#Partial match', alignRight: false },
-	{ id: 'numNoMatch', label: '#No match', alignRight: false },
+	{ id: 'number_total_query', label: '#Queries', alignRight: false },
+	{ id: 'number_exact_match', label: '#Exact natch', alignRight: false },
+	{ id: 'number_partial_match', label: '#Partial match', alignRight: false },
+	{ id: 'number_no_match', label: '#No match', alignRight: false },
 	{ id: '' },
 ];
 
@@ -171,7 +181,22 @@ export default function Server() {
 			// .get('https://localhost:3503/performance')
 			.then(response => {
 				console.log(response);
-				setUserlist(USER_LIST);
+				const data = response.data;
+				const total = {
+					id: "TOTAL",
+					number_total_query: 0,
+					number_exact_match: 0,
+					number_partial_match: 0,
+					number_no_match: 0
+				};
+				data.forEach((d) => {
+					total.number_total_query += d.number_total_query;
+					total.number_exact_match += d.number_exact_match;
+					total.number_partial_match += d.number_partial_match;
+					total.number_no_match += d.number_no_match;
+				});
+				data.unshift(total);
+				setUserlist(data);
 			})
 			.catch(err => {
 				console.log('err', err);
@@ -207,9 +232,12 @@ export default function Server() {
 									/>
 									<TableBody>
 										{filteredUsers && filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-											const { id, numTotalQuery, numExactMatch, numPartialMatch, numNoMatch } = row;
-											const isItemSelected = selected.indexOf(id) !== -1;
+											// const { id, numTotalQuery, numExactMatch, numPartialMatch, numNoMatch } = row;
+											const { id, number_total_query, number_exact_match, number_partial_match, number_no_match } = row;
 
+											const isItemSelected = selected.indexOf(id) !== -1;
+											const bcolor = (index === 0 ? 'red' : 'black');
+											const backColor = (index === 0 ? '#fff9a8' : 'white');
 											return (
 												<TableRow
 													hover
@@ -218,6 +246,7 @@ export default function Server() {
 													role="checkbox"
 													selected={isItemSelected}
 													aria-checked={isItemSelected}
+													style={{ backgroundColor: backColor }}
 												>
 													<TableCell padding="checkbox">
 														<Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, id)} />
@@ -225,15 +254,19 @@ export default function Server() {
 													<TableCell component="th" scope="row" padding="none">
 														<Stack direction="row" alignItems="center" spacing={2}>
 															<Avatar alt={id} src={`/static/mock-images/avatars/avatar_${index + 1}.jpg`} />
-															<Typography variant="subtitle2" noWrap>
+															<Typography variant="subtitle2" noWrap color={bcolor}>
 																{id}
 															</Typography>
 														</Stack>
 													</TableCell>
-													<TableCell align="left">{numTotalQuery}</TableCell>
+													{/* <TableCell align="left">{numTotalQuery}</TableCell>
 													<TableCell align="left">{numExactMatch}</TableCell>
 													<TableCell align="left">{numPartialMatch}</TableCell>
-													<TableCell align="left">{numNoMatch}</TableCell>
+													<TableCell align="left">{numNoMatch}</TableCell> */}
+													<TableCell align="left" style={{ color: bcolor }}>{number_total_query}</TableCell>
+													<TableCell align="left" style={{ color: bcolor }}>{number_exact_match}</TableCell>
+													<TableCell align="left" style={{ color: bcolor }}>{number_partial_match}</TableCell>
+													<TableCell align="left" style={{ color: bcolor }}>{number_no_match}</TableCell>
 													<TableCell align="right">
 														<UserMoreMenu />
 													</TableCell>
