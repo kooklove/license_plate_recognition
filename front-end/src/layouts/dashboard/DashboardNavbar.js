@@ -38,11 +38,9 @@ const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
 
 DashboardNavbar.propTypes = {
   onOpenSidebar: PropTypes.func,
-  onLogout: PropTypes.func,
-  onSearch: PropTypes.func
 };
 
-export default function DashboardNavbar({ onOpenSidebar, onSearch, onLogout }) {
+export default function DashboardNavbar({ onOpenSidebar }) {
   return (
     <RootStyle>
       <ToolbarStyle>
@@ -50,13 +48,13 @@ export default function DashboardNavbar({ onOpenSidebar, onSearch, onLogout }) {
           <Iconify icon="eva:menu-2-fill" />
         </IconButton>
 
-        <Searchbar onSearch={onSearch} />
+        <Searchbar />
         <Box sx={{ flexGrow: 1 }} />
 
         <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
           <LanguagePopover />
           <NotificationsPopover />
-          <AccountPopover cbLogout={() => onLogout()} />
+          <AccountPopover />
         </Stack>
       </ToolbarStyle>
     </RootStyle>

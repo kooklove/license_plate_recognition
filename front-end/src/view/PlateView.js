@@ -4,57 +4,101 @@
 /* eslint-disable no-case-declarations */
 /* eslint-disable arrow-body-style */
 import { IconButton } from '@mui/material';
-import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import Draggable from 'react-draggable';
 import { Button, Card, CardBody, CardImg, CardSubtitle, CardTitle, Col, Row, UncontrolledAlert } from 'reactstrap';
 import Iconify from '../components/Iconify';
+import { ModelContextStore } from '../model/ModelStore';
 
 const BORDER_COLOR = 'rgba(245, 220, 145, 0.8)';
 
-PlateView.propTypes = {
-  platesFound: PropTypes.array
-};
+function PlateView() {
+  const modelContext = useContext(ModelContextStore);
 
-function PlateView({ platesFound }) {
   const [alert, setAlert] = useState(undefined);
   const [found, setFound] = useState(undefined);
   const [isPartial, setIsPartial] = useState(false);
 
   useEffect(() => {
-    try {
-      if (platesFound === undefined) {
-        return;
-      }
-      console.log(platesFound);
-      if (platesFound.length < 1) {
-        return;
-      }
-      setIsPartial(platesFound.length > 1);
-
-      // TODO when multiple
-      const m = platesFound[0];
-      console.log(m);
-      switch (m.status) {
-        case "Owner Wanted":
-        case "Stolen":
-        case "Unpaid Fines - Tow":
-          setTimeout(() => setAlert(undefined), 3000);
-          const s = m.plate + " - " + m.status + "!!";
-          setAlert(s);
-          break;
-        case "No Wants/Warrants":
-          break;
-        default:
-          break;
-      }
-      if (!found || (found.plate !== m.plate)) {
-        setFound(m);
-      }
-    } catch (err) {
-      console.error(err);
+    if (modelContext.response === undefined) {
+      return;
     }
-  }, [platesFound]);
+    console.log("modelContext.response", modelContext.response);
+    switch (modelContext.response.type) {
+      case 'searchResult':
+        try {
+          const platesFound = modelContext.response.data;
+          if (platesFound === undefined) {
+            return;
+          }
+          console.log(platesFound);
+          if (platesFound.length < 1) {
+            return;
+          }
+          setIsPartial(platesFound.length > 1);
+
+          // TODO when multiple
+          const m = platesFound[0];
+          console.log(m);
+          switch (m.status) {
+            case "Owner Wanted":
+            case "Stolen":
+            case "Unpaid Fines - Tow":
+              setTimeout(() => setAlert(undefined), 3000);
+              const s = m.plate + " - " + m.status + "!!";
+              setAlert(s);
+              break;
+            case "No Wants/Warrants":
+              break;
+            default:
+              break;
+          }
+          if (!found || (found.plate !== m.plate)) {
+            setFound(m);
+          }
+        } catch (err) {
+          console.error(err);
+        }
+        break;
+      default:
+        break;
+    }
+  }, [modelContext.response])
+
+  // useEffect(() => {
+  // try {
+  //   if (platesFound === undefined) {
+  //     return;
+  //   }
+  //   console.log(platesFound);
+  //   if (platesFound.length < 1) {
+  //     return;
+  //   }
+  //   setIsPartial(platesFound.length > 1);
+
+  //   // TODO when multiple
+  //   const m = platesFound[0];
+  //   console.log(m);
+  //   switch (m.status) {
+  //     case "Owner Wanted":
+  //     case "Stolen":
+  //     case "Unpaid Fines - Tow":
+  //       setTimeout(() => setAlert(undefined), 3000);
+  //       const s = m.plate + " - " + m.status + "!!";
+  //       setAlert(s);
+  //       break;
+  //     case "No Wants/Warrants":
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  //   if (!found || (found.plate !== m.plate)) {
+  //     setFound(m);
+  //   }
+  // } catch (err) {
+  //   console.error(err);
+  // }
+  // }, [platesFound]);
 
   const getBirth = (birth) => {
     return birth;

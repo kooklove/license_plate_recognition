@@ -5,21 +5,23 @@
 /* eslint-disable arrow-body-style */
 /* eslint-disable no-alert */
 import PropTypes from 'prop-types';
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { Badge, Button, Input, InputGroup, InputGroupText, Spinner } from 'reactstrap';
+import { ModelContextStore } from '../model/ModelStore';
 
 const DEFAULT_BASEDIR = 'F:\\22_SWARCH_PROJECT\\'; // 'C:\\swarchi\\license_plate_recognition\\video\\';
 
 Preview.propTypes = {
 	host: PropTypes.string,
 	port: PropTypes.number,
-	onFoundPlate: PropTypes.func,
 	fitToWindow: PropTypes.bool,
 	showDetail: PropTypes.bool,
 };
 // ----------------------------------------------------------------------
 
-export default function Preview({ host, port, onFoundPlate, fitToWindow, showDetail }) {
+export default function Preview({ host, port, fitToWindow, showDetail }) {
+	const { setCommand } = useContext(ModelContextStore);
+
 	const [alprHost, setAlprHost] = useState(host || 'localhost');
 	const [alprPort, setAlprPort] = useState(port || 8080);
 	const [setting, setSetting] = useState(false);
@@ -65,7 +67,8 @@ export default function Preview({ host, port, onFoundPlate, fitToWindow, showDet
 						setDatauri(img);
 					} else if ('PLATE' in m) {
 						console.log('found plate', m.PLATE);
-						onFoundPlate(m.PLATE);
+						// onFoundPlate(m.PLATE);
+						setCommand({ type: 'search', data: { keyword: m.PLATE } });
 					} else if ('status' in m) {
 						if (m.status === 'finished') {
 							setIsPlaying(false);
@@ -98,7 +101,6 @@ export default function Preview({ host, port, onFoundPlate, fitToWindow, showDet
 			{
 				request: 'start',
 				interval: "" + interval,
-				// filepath: ("FILE:" + baseDir + video + '.avi')
 				filepath: (baseDir + video + '.avi')
 			}
 		const s = JSON.stringify(param);

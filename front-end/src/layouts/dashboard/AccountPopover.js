@@ -1,12 +1,8 @@
-import { useRef, useState } from 'react';
-// import { Link as RouterLink } from 'react-router-dom';
-import PropTypes from 'prop-types';
-// @mui
+import { Avatar, Box, Divider, IconButton, MenuItem, Typography } from '@mui/material';
 import { alpha } from '@mui/material/styles';
-import { Box, Divider, Typography, MenuItem, Avatar, IconButton } from '@mui/material';
-// components
+import { useContext, useRef, useState } from 'react';
 import MenuPopover from '../../components/MenuPopover';
-// mocks_
+import { ModelContextStore } from '../../model/ModelStore';
 import account from '../../_mock/account';
 
 // ----------------------------------------------------------------------
@@ -28,13 +24,11 @@ import account from '../../_mock/account';
 //     linkTo: '#',
 //   },
 // ];
-
-AccountPopover.propTypes = {
-  cbLogout: PropTypes.func,
-};
 // ----------------------------------------------------------------------
 
-export default function AccountPopover({cbLogout}) {
+export default function AccountPopover() {
+  const { setCommand } = useContext(ModelContextStore);
+
   const anchorRef = useRef(null);
 
   const [open, setOpen] = useState(null);
@@ -45,7 +39,8 @@ export default function AccountPopover({cbLogout}) {
 
   const handleClose = () => {
     setOpen(null);
-    cbLogout();
+    setCommand({ type: 'logout' });
+    window.location.href = '/';
   };
 
   return (

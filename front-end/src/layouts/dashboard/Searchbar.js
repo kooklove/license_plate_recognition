@@ -1,10 +1,9 @@
-import { useState } from 'react';
-import PropTypes from 'prop-types';
-// material
+/* eslint-disable  object-shorthand */
+import { useState, useContext } from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import { Input, Slide, Button, IconButton, InputAdornment, ClickAwayListener } from '@mui/material';
-// component
 import Iconify from '../../components/Iconify';
+import { ModelContextStore } from '../../model/ModelStore';
 
 // ----------------------------------------------------------------------
 
@@ -32,13 +31,10 @@ const SearchbarStyle = styled('div')(({ theme }) => ({
   },
 }));
 
-Searchbar.propTypes = {
-  onSearch: PropTypes.func
-};
-
 // ----------------------------------------------------------------------
 
-export default function Searchbar({ onSearch }) {
+export default function Searchbar() {
+  const { setCommand } = useContext(ModelContextStore);
   const [isOpen, setOpen] = useState(false);
   const [keyword, setKeyword] = useState(undefined);
 
@@ -48,8 +44,7 @@ export default function Searchbar({ onSearch }) {
 
   const handleClose = () => {
     if (keyword !== undefined) {
-      console.log(keyword);
-      onSearch(keyword);
+      setCommand({ type: 'search', data: { keyword: keyword } });
       setOpen(false);
     }
   };

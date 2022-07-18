@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 // material
@@ -33,21 +32,15 @@ const MainStyle = styled('div')(({ theme }) => ({
   }
 }));
 
-DashboardLayout.propTypes = {
-  onSearch: PropTypes.func,
-  onLogout: PropTypes.func,
-};
 // ----------------------------------------------------------------------
 
-export default function DashboardLayout({ onSearch, onLogout }) {
+export default function DashboardLayout() {
   const [open, setOpen] = useState(false);
-  
+
   return (
     <RootStyle>
       <DashboardNavbar
         onOpenSidebar={() => setOpen(true)}
-        onSearch={(k) => onSearch(k)}
-        onLogout={() => onLogout()}
       />
       <DashboardSidebar
         isOpenSidebar={open}

@@ -11,14 +11,12 @@ import Draggable from 'react-draggable';
 import { AccordionBody, AccordionHeader, AccordionItem, Badge, Button, Col, Input, InputGroup, InputGroupText, Row, Spinner, UncontrolledAccordion } from 'reactstrap';
 // import Iconify from '../components/Iconify';
 import NetworkConnectivityController from './NetworkConnectivityController';
-import { LoginContextStore } from '../model/LoginContext';
+import { ModelContextStore } from '../model/ModelStore';
 
 const HTTPS_PORT = 3503;
 
 RestApiController.propTypes = {
   showDetail: PropTypes.bool,
-  request: PropTypes.object,
-  onPlatesFound: PropTypes.func,
 };
 // ----------------------------------------------------------------------
 
@@ -31,7 +29,7 @@ const readStorage = (key, defaultValue = undefined) => {
   return r
 }
 
-function RestApiController({ showDetail, request, onPlatesFound }) {
+function RestApiController({ showDetail }) {
   const [protocol, setProtocol] = useState(readStorage('restapi_protocol', 'https:'));
   const [host, setHost] = useState(readStorage('restapi_host', '10.58.2.34'));
   const [port, setPort] = useState(readStorage('restapi_port', HTTPS_PORT));
@@ -41,33 +39,27 @@ function RestApiController({ showDetail, request, onPlatesFound }) {
   const [platesFound, setPlatesFound] = useState(undefined);
   const [detectedCarNum, setDetectedCarNum] = useState('LKY1360');  // or try HHF6697
   const [ongoing, setOngoing] = useState(false);
-  const [restReq, setRestReq] = useState(undefined);
 
-  const loginContext = useContext(LoginContextStore);
+  const modelContext = useContext(ModelContextStore);
+  const { setResponse } = useContext(ModelContextStore);
+
+  const [previousKeyword, setPreviousKeyword] = useState(undefined);
 
   useEffect(() => {
-    if (request === undefined) {
+    if (modelContext.command === undefined) {
       return;
     }
-    console.log("props.request", request);
-    setRestReq(request);
-  }, [request])
-
-  useEffect(() => {
-    requestToLogin(loginContext.loginInfo);
-  }, [loginContext])
-
-  useEffect(() => {
-    if (restReq === undefined) {
-      return;
-    }
-    console.log("restReq", restReq);
-    switch (restReq.type) {
+    console.log("modelContext.command", modelContext.command);
+    switch (modelContext.command.type) {
       case 'search':
-        requestToSearch(restReq.keyword);
+        if (previousKeyword === modelContext.command.data.keyword) {
+          return;
+        }
+        setPreviousKeyword(modelContext.command.data.keyword);
+        requestToSearch(modelContext.command.data.keyword);
         break;
       case 'login':
-        requestToLogin(restReq.login);
+        requestToLogin(modelContext.command.data);
         break;
       case 'logout':
         requestToLogout();
@@ -75,7 +67,7 @@ function RestApiController({ showDetail, request, onPlatesFound }) {
       default:
         break;
     }
-  }, [restReq]);
+  }, [modelContext.command])
 
   function getUrl(api = undefined) {
     return protocol + '//' + host + ':' + port + '/' + api;
@@ -106,10 +98,10 @@ function RestApiController({ showDetail, request, onPlatesFound }) {
     axios
       .get(url, header)
       .then(response => {
-        console.log('response.data', response.data);
+        console.log('response.data', response.data, url, header);
         setOngoing(false);
         response.data && setPlatesFound(response.data);
-        response.data && onPlatesFound(response.data);
+        response.data && setResponse({ type: 'searchResult', data: response.data });
       })
       .catch(err => {
         console.log('error', err);

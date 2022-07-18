@@ -1,17 +1,13 @@
 import { useContext } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-// @mui
 import { styled } from '@mui/material/styles';
 import { Card, Link, Container, Typography } from '@mui/material';
-// hooks
 import useResponsive from '../hooks/useResponsive';
-// components
 import Page from '../components/Page';
 import Logo from '../components/Logo';
-// sections
 import { LoginForm } from '../sections/auth/login';
 import AuthSocial from '../sections/auth/AuthSocial';
-import { LoginContextStore } from '../model/LoginContext';
+import { ModelContextStore } from '../model/ModelStore';
 
 // ----------------------------------------------------------------------
 
@@ -59,13 +55,13 @@ const ContentStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function Login() {
-  const { setLoginInfo } = useContext(LoginContextStore);
+  const { setCommand } = useContext(ModelContextStore);
   const smUp = useResponsive('up', 'sm');
   const mdUp = useResponsive('up', 'md');
 
   const onLogin = (data) => {
     console.log("onLogin", data);
-    setLoginInfo({ id: data.email, pw: data.password });
+    setCommand({ type: 'login', data: { id: data.email, pw: data.password } });
   }
   return (
     <Page title="Login">
