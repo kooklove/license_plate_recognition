@@ -98,7 +98,8 @@ export default function Preview({ host, port, onFoundPlate, fitToWindow, showDet
 			{
 				request: 'start',
 				interval: "" + interval,
-				filepath: ("FILE:" + baseDir + video + '.avi')
+				// filepath: ("FILE:" + baseDir + video + '.avi')
+				filepath: (baseDir + video + '.avi')
 			}
 		const s = JSON.stringify(param);
 		setIsLoading(!isPlaying);
