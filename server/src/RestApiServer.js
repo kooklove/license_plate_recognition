@@ -26,6 +26,8 @@ const jsonconfig = JSON.parse(
 const DEFAULT_PORT_HTTP = 3502;
 const DEFAULT_PORT_HTTPS = 3503;
 
+var server_start_date = new Date().getTime();
+
 export default class RestApiServer {
   constructor(tlsOption, portHttp = DEFAULT_PORT_HTTP, portHttps = DEFAULT_PORT_HTTPS) {
     this.portHttp = portHttp;
@@ -134,6 +136,15 @@ export default class RestApiServer {
       var perflog = performanceSummary();
       return  res.json(perflog);
     });
+
+    app.get('/performance/start', (req, res) => {
+      server_start_date = new Date().getTime();
+      return  res.json(server_start_date);
+    });
+
+    app.get('/performance/startdate', (req, res) => {
+      return  res.json(server_start_date);
+    });    
 
     const httpServer = http.createServer(app);
     httpServer.listen(this.portHttp, () => {
