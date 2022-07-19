@@ -31,7 +31,7 @@ function PlateView() {
           if (platesFound === undefined) {
             return;
           }
-          console.log(platesFound);
+          // console.log(platesFound);
           if (platesFound.length < 1) {
             return;
           }
@@ -64,41 +64,6 @@ function PlateView() {
         break;
     }
   }, [modelContext.response])
-
-  // useEffect(() => {
-  // try {
-  //   if (platesFound === undefined) {
-  //     return;
-  //   }
-  //   console.log(platesFound);
-  //   if (platesFound.length < 1) {
-  //     return;
-  //   }
-  //   setIsPartial(platesFound.length > 1);
-
-  //   // TODO when multiple
-  //   const m = platesFound[0];
-  //   console.log(m);
-  //   switch (m.status) {
-  //     case "Owner Wanted":
-  //     case "Stolen":
-  //     case "Unpaid Fines - Tow":
-  //       setTimeout(() => setAlert(undefined), 3000);
-  //       const s = m.plate + " - " + m.status + "!!";
-  //       setAlert(s);
-  //       break;
-  //     case "No Wants/Warrants":
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  //   if (!found || (found.plate !== m.plate)) {
-  //     setFound(m);
-  //   }
-  // } catch (err) {
-  //   console.error(err);
-  // }
-  // }, [platesFound]);
 
   const getBirth = (birth) => {
     return birth;

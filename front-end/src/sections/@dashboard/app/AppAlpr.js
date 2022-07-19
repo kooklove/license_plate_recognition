@@ -11,7 +11,7 @@ AppAlpr.propTypes = {
 export default function AppAlpr({ title, subheader, ...other }) {
   return (<>
     <Card {...other} style={{ border: '0px solid green', height: '100%' }}>
-      <CardHeader title={title} subheader={subheader} />
+      {/* <CardHeader title={title} subheader={subheader} /> */}
       <Box sx={{ p: 3, pb: 1 }} dir="ltr" style={{ border: '0px solid red', height: '100%' }}>
         <AlprModel showDetail />
       </Box>

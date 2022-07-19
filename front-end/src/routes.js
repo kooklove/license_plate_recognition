@@ -6,6 +6,7 @@ import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 //
 import Blog from './pages/Blog';
 import User from './pages/User';
+import History from './pages/History';
 import Server from './pages/Server';
 import Login from './pages/Login';
 import NotFound from './pages/Page404';
@@ -25,6 +26,7 @@ export default function Router() {
       element: <DashboardLayout />,
       children: [{ path: 'app', element: <DashboardApp /> },
       { path: 'user', element: <User /> },
+      { path: 'history', element: <History /> },
       { path: 'products', element: <Products /> },
       { path: 'blog', element: <Blog /> },
       ],

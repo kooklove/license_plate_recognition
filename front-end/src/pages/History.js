@@ -1,30 +1,44 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable camelcase */
-import axios from 'axios';
-import { filter } from 'lodash';
-import { useEffect, useState } from 'react';
 import {
-	Avatar, Button, Card, Checkbox, Container, Stack, Table, TableBody,
+	Box, Button, Card, Checkbox, Container, Stack, Table, TableBody,
 	TableCell, TableContainer,
-	TablePagination, TableRow, Typography, Box
+	TablePagination, TableRow, Typography
 } from '@mui/material';
+import { filter } from 'lodash';
+import { useContext, useEffect, useState } from 'react';
+import Iconify from '../components/Iconify';
 import Page from '../components/Page';
 import Scrollbar from '../components/Scrollbar';
 import SearchNotFound from '../components/SearchNotFound';
+import { ModelContextStore } from '../model/ModelStore';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
-import Iconify from '../components/Iconify';
 
 // ----------------------------------------------------------------------
-const SERVER_URL = 'https://10.58.2.34:3503/performance';
+
+// "plate":"LKY1360",
+// "status":"Owner Wanted",
+// "registration":"08/22/2023",
+// "ownerName":"Jennifer",
+// "ownerBirth":"11/11/2011",
+// "ownerAddress":"5938",
+// "ownerCity":"West",
+// "vehicleYear":2014,
+// "vehicleMaker":"Chrysler",
+// "vehicleModel":"Tucson",
+// "vehicleColor":"lime",
 
 const TABLE_HEAD = [
-	{ id: 'id', label: 'User ID', alignRight: false },
-	{ id: 'number_total_query', label: '#Queries', alignRight: false },
-	{ id: 'number_exact_match', label: '#Exact natch', alignRight: false },
-	{ id: 'number_partial_match', label: '#Partial match', alignRight: false },
-	{ id: 'number_no_match', label: '#No match', alignRight: false },
+	// { id: 'id', label: 'id', alignRight: false },
+	{ id: 'plate', label: 'Plate', alignRight: false },
+	{ id: 'status', label: 'Status', alignRight: false },
+	{ id: 'registration', label: 'Registration', alignRight: false },
+	{ id: 'owner', label: 'Owner', alignRight: false },
+	{ id: 'vehicle', label: 'Vehicle', alignRight: false },
+	{ id: 'partial', label: 'Partial Match', alignRight: false },
 	{ id: '' },
 ];
+
 
 // ----------------------------------------------------------------------
 
@@ -58,7 +72,10 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function Server() {
-	const [userlist, setUserlist] = useState(undefined);
+	const modelContext = useContext(ModelContextStore);
+	const [found, setFound] = useState(undefined);
+
+	const [userlist, setUserlist] = useState([]);
 	const [page, setPage] = useState(0);
 	const [order, setOrder] = useState('asc');
 	const [selected, setSelected] = useState([]);
@@ -75,9 +92,51 @@ export default function Server() {
 	useEffect(() => {
 		const today = new Date(+new Date() + 3240 * 10000).toISOString().replace("T", " ").replace(/\..*/, '');
 		setLastUpdated(today);
-
-		requestToPerformanceMetric();
 	}, []);
+
+	useEffect(() => {
+		if (modelContext.cache === undefined) {
+			return;
+		}
+		console.log("modelContext.cache", modelContext.cache);
+		try {
+			modelContext.cache.forEach((platesFound) => {
+				const m = platesFound[0];
+				console.log(m);
+				if (m !== undefined) {
+
+					// "plate":"LKY1360",
+					// "status":"Owner Wanted",
+					// "registration":"08/22/2023",
+					// "ownerName":"Jennifer",
+					// "ownerBirth":"11/11/2011",
+					// "ownerAddress":"5938",
+					// "ownerCity":"West",
+					// "vehicleYear":2014,
+					// "vehicleMaker":"Chrysler",
+					// "vehicleModel":"Tucson",
+					// "vehicleColor":"lime",
+
+					const revised = {
+						id: m.id,
+						plate: m.plate,
+						status: m.status,
+						registration: m.registration,
+						owner: m.ownerName,
+						vehicle: m.vehicleModel,
+						partial: platesFound.length > 1 ? 'Partial' : 'Exact'
+					}
+
+					const ul = userlist;
+					ul.push(revised);
+					console.log("revised", revised, "total", ul);
+					setUserlist(ul);
+				}
+			});
+		} catch (err) {
+			console.error(err);
+		}
+	}, [modelContext.cache]);
 
 	useEffect(() => {
 		const refresh = () => {
@@ -86,6 +145,7 @@ export default function Server() {
 			setFilteredUsers(filtered);
 			setIsUserNotFound(filtered.length === 0);
 		}
+
 		if (userlist) {
 			refresh();
 		}
@@ -134,34 +194,6 @@ export default function Server() {
 		setFilterName(event.target.value);
 	};
 
-	const requestToPerformanceMetric = async () => {
-		console.log("requestToPerformanceMetric");
-		axios
-			.get(SERVER_URL)
-			.then(response => {
-				console.log(response);
-				const data = response.data;
-				const total = {
-					id: "TOTAL",
-					number_total_query: 0,
-					number_exact_match: 0,
-					number_partial_match: 0,
-					number_no_match: 0
-				};
-				data.forEach((d) => {
-					total.number_total_query += d.number_total_query;
-					total.number_exact_match += d.number_exact_match;
-					total.number_partial_match += d.number_partial_match;
-					total.number_no_match += d.number_no_match;
-				});
-				data.unshift(total);
-				setUserlist(data);
-			})
-			.catch(err => {
-				console.log('err', err);
-			});
-	}
-
 	return (<>
 		{userlist &&
 			<Page title="Server">
@@ -199,12 +231,20 @@ export default function Server() {
 									/>
 									<TableBody>
 										{filteredUsers && filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-											// const { id, numTotalQuery, numExactMatch, numPartialMatch, numNoMatch } = row;
-											const { id, number_total_query, number_exact_match, number_partial_match, number_no_match } = row;
+											// "plate":"LKY1360",
+											// "status":"Owner Wanted",
+											// "registration":"08/22/2023",
+											// "ownerName":"Jennifer",
+											// "ownerBirth":"11/11/2011",
+											// "ownerAddress":"5938",
+											// "ownerCity":"West",
+											// "vehicleYear":2014,
+											// "vehicleMaker":"Chrysler",
+											// "vehicleModel":"Tucson",
+											// "vehicleColor":"lime",
+											const { id, plate, status, registration, owner, vehicle, partial } = row;
 
 											const isItemSelected = selected.indexOf(id) !== -1;
-											const bcolor = (index === 0 ? 'red' : 'black');
-											const backColor = (index === 0 ? '#fff9a8' : 'white');
 											return (
 												<TableRow
 													hover
@@ -213,27 +253,23 @@ export default function Server() {
 													role="checkbox"
 													selected={isItemSelected}
 													aria-checked={isItemSelected}
-													style={{ backgroundColor: backColor }}
 												>
 													<TableCell padding="checkbox">
-														<Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, id)} />
+														<Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, plate)} />
 													</TableCell>
 													<TableCell component="th" scope="row" padding="none">
 														<Stack direction="row" alignItems="center" spacing={2}>
-															<Avatar alt={id} src={`/static/mock-images/avatars/avatar_${index + 1}.jpg`} />
-															<Typography variant="subtitle2" noWrap color={bcolor}>
-																{id}
+															{/* <Avatar alt={id} src={`/static/mock-images/avatars/avatar_${index + 1}.jpg`} /> */}
+															<Typography variant="subtitle2" noWrap>
+																{plate}
 															</Typography>
 														</Stack>
 													</TableCell>
-													{/* <TableCell align="left">{numTotalQuery}</TableCell>
-													<TableCell align="left">{numExactMatch}</TableCell>
-													<TableCell align="left">{numPartialMatch}</TableCell>
-													<TableCell align="left">{numNoMatch}</TableCell> */}
-													<TableCell align="left" style={{ color: bcolor }}>{number_total_query}</TableCell>
-													<TableCell align="left" style={{ color: bcolor }}>{number_exact_match}</TableCell>
-													<TableCell align="left" style={{ color: bcolor }}>{number_partial_match}</TableCell>
-													<TableCell align="left" style={{ color: bcolor }}>{number_no_match}</TableCell>
+													<TableCell align="left" >{status}</TableCell>
+													<TableCell align="left" >{registration}</TableCell>
+													<TableCell align="left" >{owner}</TableCell>
+													<TableCell align="left" >{vehicle}</TableCell>
+													<TableCell align="left" >{partial}</TableCell>
 													<TableCell align="right">
 														<UserMoreMenu />
 													</TableCell>

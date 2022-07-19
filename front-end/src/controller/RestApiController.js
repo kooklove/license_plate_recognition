@@ -169,7 +169,7 @@ function RestApiController({ showDetail }) {
         <div style={
           // props.fitToWindow ?
           // { position: 'fixed', top: 0, right: 0, margin: '1em', width: '450px', padding: '2em', borderRadius: '25px', background: 'rgba(255,255,255,0.7)' } :
-          { position: 'absolute', bottop: 0, right: 0, width: '40%', padding: '2em', background: 'rgba(221, 211, 242, 0.7)', borderRadius: '25px', fontSize: '0.8em' }}>
+          { zoom: 0.8, position: 'absolute', left: '50%', width: '40%', padding: '1em', background: 'rgba(221, 211, 242, 0.7)', borderRadius: '25px', fontSize: '1em' }}>
           {/* <div style={{ position: 'absolute', right: 0, top: 0 }}>
             <IconButton onClick={() => setHideMenu(true)}>
               <Iconify icon="ant-design:close-circle-filled" />

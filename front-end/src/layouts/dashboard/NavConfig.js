@@ -12,9 +12,9 @@ const navConfig = [
     icon: getIcon('el:car'),
   },
   {
-    title: 'user',
-    path: '/dashboard/user',
-    icon: getIcon('eva:people-fill'),
+    title: 'history',
+    path: '/dashboard/history',
+    icon: getIcon('fluent:history-32-filled'),
   },
   // {
   //   title: 'product',
@@ -22,9 +22,9 @@ const navConfig = [
   //   icon: getIcon('eva:shopping-bag-fill'),
   // },
   {
-    title: 'blog',
-    path: '/dashboard/blog',
-    icon: getIcon('eva:file-text-fill'),
+    title: 'server',
+    path: '/server',
+    icon: getIcon('ant-design:line-chart-outlined'),
   },
   // {
   //   title: 'login',

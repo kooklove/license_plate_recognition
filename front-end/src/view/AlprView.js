@@ -17,7 +17,7 @@ function AlprModel({ showDetail }) {
   const handle = useFullScreenHandle();
 
   return (
-    <div style={{ position: 'absolute', top: '6em', left: '15%', width: '100%', zIndex: 9, border: '0px solid blue' }}>
+    <div style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 9, border: '0px solid blue' }}>
       <FullScreen handle={handle}>
         <RestApiController
           showDetail={showDetail}

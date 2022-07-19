@@ -6,6 +6,7 @@
 /* eslint-disable no-alert */
 import PropTypes from 'prop-types';
 import { useContext, useEffect, useRef, useState } from 'react';
+import Draggable from 'react-draggable';
 import { Badge, Button, Input, InputGroup, InputGroupText, Spinner } from 'reactstrap';
 import { ModelContextStore } from '../model/ModelStore';
 
@@ -117,92 +118,94 @@ export default function Preview({ host, port, fitToWindow, showDetail }) {
 	return (<>
 		<div style={{ position: 'relative', width: '100%', zIndex: 0 }} >
 
-			<div style={fitToWindow ?
-				{ position: 'absolute', margin: '1em', width: '500px', padding: '2em', borderRadius: '25px', background: 'rgba(255,255,255,0.7)', zIndex: 1 } :
-				{ float: 'left', width: '40%', padding: '2em', zIndex: 1 }}>
-				<Badge
-					style={{ marginBottom: '1em', fontSize: "0.8em" }}
-					color={isConnected ? 'primary' : 'danger'}
-					onClick={() => setSetting(!setting)}>
-					{getInfo()}
-				</Badge>
-				{setting &&
+			<Draggable>
+				<div style={fitToWindow ?
+					{ position: 'absolute', margin: '1em', width: '500px', padding: '1em', borderRadius: '25px', background: 'rgba(255,255,255,0.7)', zIndex: 1 } :
+					{ float: 'left', width: '40%', padding: '1em', zIndex: 1 }}>
+					<Badge
+						style={{ marginBottom: '1em', fontSize: "0.8em" }}
+						color={isConnected ? 'primary' : 'danger'}
+						onClick={() => setSetting(!setting)}>
+						{getInfo()}
+					</Badge>
+					{setting &&
+						<InputGroup size="sm" style={{ marginBottom: '1em' }}>
+							<InputGroupText >
+								alprHost
+							</InputGroupText>
+							<Input
+								id="connect"
+								name="connect"
+								type="textfield"
+								defaultValue={alprHost}
+								onChange={e => setAlprHost(e.target.value)}
+							/>
+							<InputGroupText >
+								alprPort
+							</InputGroupText>
+							<Input
+								id="alprPort"
+								name="alprPort"
+								type="textfield"
+								defaultValue={alprPort}
+								onChange={e => setAlprPort(e.target.value)}
+							/>
+							<Button onClick={() => reconnect()}>
+								Reconnect
+							</Button>
+						</InputGroup>
+					}
 					<InputGroup size="sm" style={{ marginBottom: '1em' }}>
 						<InputGroupText >
-							alprHost
+							Filepath
 						</InputGroupText>
 						<Input
-							id="connect"
-							name="connect"
+							id="selectVideoPath"
+							name="selectPath"
 							type="textfield"
-							defaultValue={alprHost}
-							onChange={e => setAlprHost(e.target.value)}
+							defaultValue={baseDir}
+							onChange={e => setBaseDir(e.target.value)}
 						/>
-						<InputGroupText >
-							alprPort
-						</InputGroupText>
-						<Input
-							id="alprPort"
-							name="alprPort"
-							type="textfield"
-							defaultValue={alprPort}
-							onChange={e => setAlprPort(e.target.value)}
-						/>
-						<Button onClick={() => reconnect()}>
-							Reconnect
-						</Button>
 					</InputGroup>
-				}
-				<InputGroup size="sm" style={{ marginBottom: '1em' }}>
-					<InputGroupText >
-						Filepath
-					</InputGroupText>
-					<Input
-						id="selectVideoPath"
-						name="selectPath"
-						type="textfield"
-						defaultValue={baseDir}
-						onChange={e => setBaseDir(e.target.value)}
-					/>
-				</InputGroup>
-				<InputGroup size="sm" style={{ marginBottom: '1em' }}>
-					<InputGroupText >
-						Preview Interval
-					</InputGroupText>
-					<Input
-						id="interval"
-						name="interval"
-						type="textfield"
-						defaultValue={interval}
-						onChange={e => setInterval(e.target.value)}
-					/>
-				</InputGroup>
-				<InputGroup size="sm">
-					<InputGroupText >
-						Select
-					</InputGroupText>
-					<Input
-						id="selectVideo"
-						name="select"
-						type="select"
-						defaultValue={video}
-						onChange={e => setVideo(e.target.value)}
-					>
-						<option value='beaver1'>Beaver1</option>
-						<option value='beaver2'>Beaver2</option>
-						<option value='beaver3'>Beaver3</option>
-						<option value='beaver4'>Beaver4</option>
-					</Input>
-					<Button onClick={() => sendRequest()} color="primary">{isPlaying ? 'Cancel' : 'Play'}</Button>
-				</InputGroup>
-				<>
-					<p style={{ marginTop: '1em', fontSize: "0.8em" }}>{log && log}</p>
-					{fitToWindow || <Badge style={{ width: 'fit-content' }} color="warning">←image received</Badge>}
-				</>
-				{(isLoading === true) && <h6 style={{ color: 'red' }}><Spinner /> Waiting for loading video...</h6>}
-			</div>
+					<InputGroup size="sm" style={{ marginBottom: '1em' }}>
+						<InputGroupText >
+							Preview Interval
+						</InputGroupText>
+						<Input
+							id="interval"
+							name="interval"
+							type="textfield"
+							defaultValue={interval}
+							onChange={e => setInterval(e.target.value)}
+						/>
+					</InputGroup>
+					<InputGroup size="sm">
+						<InputGroupText >
+							Select
+						</InputGroupText>
+						<Input
+							id="selectVideo"
+							name="select"
+							type="select"
+							defaultValue={video}
+							onChange={e => setVideo(e.target.value)}
+						>
+							<option value='beaver1'>Beaver1</option>
+							<option value='beaver2'>Beaver2</option>
+							<option value='beaver3'>Beaver3</option>
+							<option value='beaver4'>Beaver4</option>
+						</Input>
+						<Button onClick={() => sendRequest()} color="primary">{isPlaying ? 'Cancel' : 'Play'}</Button>
+					</InputGroup>
+					<>
+						<p style={{ marginTop: '1em', fontSize: "0.8em" }}>{log && log}</p>
+						{fitToWindow || <Badge style={{ width: 'fit-content' }} color="warning">←image received</Badge>}
+					</>
+					{(isLoading === true) && <h6 style={{ color: 'red' }}><Spinner /> Waiting for loading video...</h6>}
+				</div>
+			</Draggable>
 			<div style={fitToWindow ? { position: 'relative', width: '100%' } : { float: 'left', width: '50%' }} >
-				<img src={datauri} style={fitToWindow ? { width: '80%' } : {}} />
+				<img src={datauri} style={fitToWindow ? { height: '100%' } : { width: '80%' }} />
 			</div>
 		</div >
 	</>);
