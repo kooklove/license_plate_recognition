@@ -27,7 +27,7 @@ const DEFAULT_PORT_HTTP = 3502;
 const DEFAULT_PORT_HTTPS = 3503;
 
 let unauthoized_access_count = 0;
-const INTRUDER_WARNING_NOTIFY_COUNT = 10;
+const INTRUDER_WARNING_NOTIFY_COUNT = 5;
 
 
 var server_start_date = new Date().getTime();
