@@ -1,20 +1,50 @@
 #include "ALPRFacade.h"
 #include "base64.h"
 
-std::atomic_flag ALPRFacade::keepRunning = ATOMIC_FLAG_INIT;
+std::atomic_flag ALPRFacade::keepRunning1 = ATOMIC_FLAG_INIT;
+std::atomic_flag ALPRFacade::keepRunning2 = ATOMIC_FLAG_INIT;
+std::atomic_flag ALPRFacade::keepRunning3 = ATOMIC_FLAG_INIT;
 
 void ALPRFacade::stopDetect() {
-    keepRunning.clear();
+    if (_type == 1)
+        keepRunning1.clear();
+    else if (_type == 2)
+        keepRunning2.clear();
+    else if (_type == 3)
+        keepRunning3.clear();
 }
 
 
 
 void ALPRFacade::detect(void (*pCallback)(int cmd, const std::string&s)) {
 
-    keepRunning.test_and_set();
+    if (_type == 1)
+        keepRunning1.test_and_set();
+    else if (_type == 2)
+        keepRunning2.test_and_set();
+    else if (_type == 3)
+        keepRunning3.test_and_set();
+    
     frameno = 0; 
 
-    Alpr alpr(county, "");
+    string configfile = "openalpr.conf";
+
+    if ( _type == 1) 
+    {
+        configfile = "openalpr_1.conf";
+    }else if ( _type == 2) 
+    {
+        configfile = "openalpr_2.conf";
+    }
+    else if ( _type == 3) 
+    {
+        configfile = "openalpr_3.conf";
+    }
+
+
+//    Alpr alpr(county, configfile, runttime_dir);
+    Alpr alpr(county, configfile);
+
     alpr.setTopN(2);
     if (alpr.isLoaded() == false)
     {
@@ -66,7 +96,15 @@ void ALPRFacade::detect(void (*pCallback)(int cmd, const std::string&s)) {
     const double thresolder = 40;
     int intervalCount = 0;
 
-    while (keepRunning.test_and_set()) {
+    bool condition = true;
+    while (condition) {
+
+        if (_type == 1 && !keepRunning1.test_and_set())
+            condition = false;
+        else if (_type == 2 && !keepRunning2.test_and_set())
+            condition = false;
+        else if (_type == 3 && !keepRunning3.test_and_set())
+            condition = false;
 
 
         Mat frame;
@@ -117,15 +155,19 @@ void ALPRFacade::detect(void (*pCallback)(int cmd, const std::string&s)) {
         if (intervalCount == interval) {
             if (pCallback)
             {
-                std::vector<uchar> buff;//buffer for coding
-                std::vector<int> param(2);
-                param[0] = cv::IMWRITE_JPEG_QUALITY;
-                param[1] = 80;//default(95) 0-100
-                cv::imencode(".jpg", frame, buff, param);
 
                 //send image to React F/E
 #define CMD_JPEGIMG 1
-                pCallback(CMD_JPEGIMG, base64_encode(buff.data(), buff.size() ) );
+                if (_type == 1)
+                {
+                    std::vector<uchar> buff;//buffer for coding
+                    std::vector<int> param(2);
+                    param[0] = cv::IMWRITE_JPEG_QUALITY;
+                    param[1] = 80;//default(95) 0-100
+                    cv::imencode(".jpg", frame, buff, param);
+
+                    pCallback(CMD_JPEGIMG, base64_encode(buff.data(), buff.size()));
+                }
                 intervalCount = 0;
 
             }
@@ -161,7 +203,8 @@ void ALPRFacade::detect(void (*pCallback)(int cmd, const std::string&s)) {
     // Closes all the frames
     //destroyAllWindows();
 #define CMD_FINISHED 3
-    pCallback(CMD_FINISHED,"");
+    if (_type == 1)
+        pCallback(CMD_FINISHED,"");
 }
 
 void ALPRFacade::InitCounter()
@@ -240,10 +283,6 @@ bool ALPRFacade::detectandshow(Alpr* alpr, cv::Mat frame, std::string region, bo
     }
     else
     {
-        char find_str_I = 'I';
-        char replace_str_one = '1';
-        char find_str_Q = 'Q';
-        char replace_str_zero = '0';
         for (int i = 0; i < results.plates.size(); i++)
         {
             char textbuffer[1024];
@@ -252,8 +291,20 @@ bool ALPRFacade::detectandshow(Alpr* alpr, cv::Mat frame, std::string region, bo
                 pointset.push_back(Point2i(results.plates[i].plate_points[z].x, results.plates[i].plate_points[z].y));
             cv::Rect rect = cv::boundingRect(pointset);
             cv::rectangle(frame, rect, cv::Scalar(0, 255, 0), 2);
-            replace(results.plates[i].bestPlate.characters.begin(), results.plates[i].bestPlate.characters.end(), find_str_I, replace_str_one);
-            replace(results.plates[i].bestPlate.characters.begin(), results.plates[i].bestPlate.characters.end(), find_str_Q, replace_str_zero);
+
+            //TODO: only on config 2 or 3
+            if (_type ==2 || _type == 3)
+            {
+                char find_str_I = 'I';
+                char replace_str_one = '1';
+                char find_str_Q = 'Q';
+                char replace_str_zero = '0';
+                replace(results.plates[i].bestPlate.characters.begin(), results.plates[i].bestPlate.characters.end(), find_str_I, replace_str_one);
+                replace(results.plates[i].bestPlate.characters.begin(), results.plates[i].bestPlate.characters.end(), find_str_Q, replace_str_zero);
+
+            }
+            
+
             sprintf_s(textbuffer, "%s - %.2f", results.plates[i].bestPlate.characters.c_str(), results.plates[i].bestPlate.overall_confidence);
 
             cv::putText(frame, textbuffer,
@@ -287,7 +338,7 @@ bool ALPRFacade::detectandshow(Alpr* alpr, cv::Mat frame, std::string region, bo
 
 #define CMD_PLATE 2
                         pCallback(CMD_PLATE, strOutput);
-                        //printf("sent ->%s\n", results.plates[i].bestPlate.characters.c_str());
+                        printf("[%d]ALPR sent ->%s\n", _type, results.plates[i].bestPlate.characters.c_str());
                     }
                 }
             //}

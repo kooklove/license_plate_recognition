@@ -25,14 +25,22 @@ class ALPRFacade
 {
 
 private:
-	ALPRFacade() {};
+	ALPRFacade(int type) : _type(type) {};
 
 public:
-	static ALPRFacade& instance() {
-		static ALPRFacade* instance = new ALPRFacade();
+	static ALPRFacade& instance1() {
+		static ALPRFacade* instance = new ALPRFacade(1);
 		return *instance;
 	}
-	
+	static ALPRFacade& instance2() {
+		static ALPRFacade* instance = new ALPRFacade(2);
+		return *instance;
+	}
+	static ALPRFacade& instance3() {
+		static ALPRFacade* instance = new ALPRFacade(3);
+		return *instance;
+	}
+
 	~ALPRFacade() {};
 	// detect
 	void detect(void (*)(int cmd, const std::string&));
@@ -96,7 +104,9 @@ public:
 
 	unsigned int CurrentPlate = 0;
 
-	static std::atomic_flag keepRunning;
+	static std::atomic_flag keepRunning1;
+	static std::atomic_flag keepRunning2;
+	static std::atomic_flag keepRunning3;
 
 #define NUMBEROFPREVIOUSPLATES 10
 	char LastPlates[NUMBEROFPREVIOUSPLATES][64] = { "","","","","" };

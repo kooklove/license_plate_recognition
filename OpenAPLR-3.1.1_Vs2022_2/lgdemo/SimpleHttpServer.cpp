@@ -37,7 +37,7 @@ int CSimpleHttpServer::clientPort = 0;
 string CSimpleHttpServer::filename = "";
 
 
-CSimpleHttpServer::CSimpleHttpServer() : m_bStop(false), cmd_queue("dispatch queue for websocker to React F/E", 1)
+CSimpleHttpServer::CSimpleHttpServer() : m_bStop(false), cmd_queue("dispatch queue for websocker to React F/E", 3)
 {
 	filename = "";
 	clientPort = 0;
@@ -145,9 +145,13 @@ bool CSimpleHttpServer::WebSocketData(const char* pszClientIp, int iClientPort, 
 	cout << "Cmd:" << strRequest << endl;
 
 	if (strRequest.compare("stop") == 0) {
-		ALPRFacade& alprFacade = ALPRFacade::instance();
+		ALPRFacade& alprFacade1 = ALPRFacade::instance1();
+		ALPRFacade& alprFacade2 = ALPRFacade::instance2();
+		ALPRFacade& alprFacade3 = ALPRFacade::instance3();
 		cout << "stop detecting loop " << endl;
-		alprFacade.stopDetect();
+		alprFacade1.stopDetect();
+		alprFacade2.stopDetect();
+		alprFacade3.stopDetect();
 	}
 	else if (strRequest.compare("start") == 0) {
 		std::string strFilepath;
@@ -163,18 +167,55 @@ bool CSimpleHttpServer::WebSocketData(const char* pszClientIp, int iClientPort, 
 		cmd_queue.dispatch([strFilepath, iInterval] {
 
 
-			ALPRFacade& alprFacade = ALPRFacade::instance();
+			ALPRFacade& alprFacade1 = ALPRFacade::instance1();
+	
+			alprFacade1.filename = strFilepath;
 
-			alprFacade.filename = strFilepath;
 			cout << "filename to alpr : " << strFilepath << endl;
-			alprFacade.interval = iInterval;
+			alprFacade1.interval = iInterval;
+
 			cout << "set Interval : " << iInterval << endl;
 
 			cout << "start detecting loop " << endl;
-			alprFacade.detect(&CSimpleHttpServer::SendImageToFrontEnd);
-
+			alprFacade1.detect(&CSimpleHttpServer::SendImageToFrontEnd);
 
 			});
+
+		cmd_queue.dispatch([strFilepath, iInterval] {
+
+
+			ALPRFacade& alprFacade2 = ALPRFacade::instance2();
+
+			alprFacade2.filename = strFilepath;
+
+			cout << "filename to alpr : " << strFilepath << endl;
+			alprFacade2.interval = iInterval;
+
+			cout << "set Interval : " << iInterval << endl;
+
+			cout << "start detecting loop " << endl;
+			alprFacade2.detect(&CSimpleHttpServer::SendImageToFrontEnd);
+
+			});
+
+		cmd_queue.dispatch([strFilepath, iInterval] {
+
+
+			ALPRFacade& alprFacade3 = ALPRFacade::instance3();
+
+			alprFacade3.filename = strFilepath;
+
+			cout << "filename to alpr : " << strFilepath << endl;
+			alprFacade3.interval = iInterval;
+
+			cout << "set Interval : " << iInterval << endl;
+
+			cout << "start detecting loop " << endl;
+			alprFacade3.detect(&CSimpleHttpServer::SendImageToFrontEnd);
+
+			});
+
+		cout << "procees start command:" << strRequest << endl;
 	}
 	else {
 		cout << "Invalid Cmd:" << strRequest << endl;
