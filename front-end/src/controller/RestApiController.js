@@ -92,12 +92,18 @@ function RestApiController({ showDetail }) {
     setOngoing(true);
 
     const s = 'GET request to ' + url + '  with param: ' + JSON.stringify(header);
+    console.log('[LOG] REQUEST ' + Date.now() + ' ' + pnum);
     console.log(s);
     setMsgSent(s);
 
     axios
       .get(url, header)
       .then(response => {
+        const plates = [];
+        for (let i=0; i<response.data.length; i+=1) {
+          plates.push(response.data[i].plate);
+        }
+        console.log('[LOG] RESPONSE ' + Date.now() + ' ' + plates.join(' '));
         console.log('response.data', response.data, url, header);
         setOngoing(false);
         response.data && setPlatesFound(response.data);
