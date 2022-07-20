@@ -26,6 +26,10 @@ const jsonconfig = JSON.parse(
 const DEFAULT_PORT_HTTP = 3502;
 const DEFAULT_PORT_HTTPS = 3503;
 
+let unauthoized_access_count = 0;
+const INTRUDER_WARNING_NOTIFY_COUNT = 10;
+
+
 var server_start_date = new Date().getTime();
 
 export default class RestApiServer {
@@ -83,12 +87,14 @@ export default class RestApiServer {
       let token = authHeader && authHeader.split(" ")[1];
 
       if (!token) {
-          console.log("wrong token format or token is not sended");
+          addUnauthorizedCount();
+          console.log("wrong token format or token is not sended." );
           return res.sendStatus(400);
       }
 
       jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (error, user) => {
           if (error) {
+              addUnauthorizedCount();
               console.log(error);
               return res.sendStatus(403);
           }
@@ -98,6 +104,17 @@ export default class RestApiServer {
       });
     };
 
+    const addUnauthorizedCount = () => {
+        unauthoized_access_count += 1;
+        console.log("Unauthorized access count ="  + unauthoized_access_count);
+
+        if ( unauthoized_access_count % INTRUDER_WARNING_NOTIFY_COUNT == 0)
+          notifyUnauthoziedAccess();
+    }
+
+    const notifyUnauthoziedAccess = () => {
+        console.log("Notify unauthorized access to administrator." );
+    }
     // add performance Log
     const addPerformanceLog = (req, res, next) => {
       next();
