@@ -3,7 +3,7 @@ import levenshtein from 'fast-levenshtein';
 import fs from 'fs';
 const config = JSON.parse(fs.readFileSync('conf/config.json'));
 
-const FIND_TIME_OUT = 500;
+const FIND_TIME_OUT = 1000;
 
 const platenumberSchema = new mongoose.Schema({
   plate: {
@@ -63,7 +63,7 @@ db.on('error', function(){
 db.once('open', function() {
   console.log('MongoDB for RestApi is connected');
 });
-const collections = mongoose.model('new_platenumber', platenumberSchema);
+const collections = mongoose.model('platenumber', platenumberSchema);
 const dist_levenshtein = config.max_dist_levenshtein;
 const max_num_of_partial_match = config.max_num_of_partial_match;
 
@@ -85,13 +85,13 @@ const apiPlate = async (req, res, logfn) => {
     if (result.length)
     {
       res.json(result);
-      console.log(req.user.id+' exact match')
+      console.log(new Date().toISOString() + req.user.id+' exact match')
       logfn(req.user.id, req.params.platenumber, start, new Date().getTime(), 'exact');
     }
     else //if no exact match
     {
       var partial_result = [];
-      let word, number;
+      let word;
       var result;
 
       //console.log(plateNumber.length)
@@ -110,29 +110,13 @@ const apiPlate = async (req, res, logfn) => {
           } catch (err) {
             res.json(result);
             console.log(req.user.id+' Search Timeout');
-            logfn( req.user.id, req.params.platenumber, start, new Date().getTime(), 'timeout');
+            logfn( req.user.id, req.params.platenumber, start, new Date().getTime(), 'no');
           }
       }
       else
       {
         result = []
       }
-
-      /*
-      //console.log(word);
-      const query = new RegExp('^'+ word);
-      //TODO: partial match
-      let start = new Date();
-      var result = await collections.find(
-        {
-          plate: query
-        }
-      );
-      let end = new Date();
-      console.log(`${end - start}ms`)
-
-      console.log(result.length);
-      */
 
       if (result.length)
       {
@@ -143,9 +127,17 @@ const apiPlate = async (req, res, logfn) => {
             partial_result.push(result[i]);
           }
         }
-        if (partial_result.length > max_num_of_partial_match)
+        if (partial_result.length == 0)
+        {
+          res.json(partial_result);
+          console.log(req.user.id+' no match');
+          logfn( req.user.id, req.params.platenumber, start, new Date().getTime(), 'no');
+        }
+        else if (partial_result.length > max_num_of_partial_match)
         {
           res.json(partial_result.slice(0,max_num_of_partial_match));
+          console.log(req.user.id+' partial match '+partial_result.length);
+          logfn( req.user.id, req.params.platenumber, start, new Date().getTime(), 'partial');
         }
         else
         {

@@ -116,7 +116,7 @@ export default class RestApiServer {
     const notifyUnauthoziedAccess = () => {
       console.log("Notify unauthorized access to administrator.");
       const now = new Date(+new Date() + 3240 * 10000).toISOString().replace("T", " ").replace(/\..*/, '');
-      mqtt.publish("Unauthorized access happened at " + now);
+      this.mqtt.publish("Unauthorized access happened at " + now);
     }
     // add performance Log
     const addPerformanceLog = (req, res, next) => {

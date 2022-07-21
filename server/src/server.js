@@ -38,8 +38,10 @@ if (USE_EXTERNAL_MQTT_BROKER) {
 } else {
   mqtt = new AedesBroker();
 }
+console.log("MQTT ready");
 new RestApiServer(getTLSOption(), REST_API_PORT_HTTP, REST_API_PORT_HTTPS, mqtt);
 new EchoServer(ECHO_SERVER_PORT);
+console.log("All ready");
 
 
 export { };
