@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 import sys
 import re
 
@@ -6,7 +8,7 @@ match_log = re.compile('.*\[LOG\] (.*)')
 
 def reformat(name):
     f_write = open('plates_team4.log', 'w')
-    with open(name) as f_read:
+    with open(name, 'r', encoding="UTF-8") as f_read:
         for line in f_read:
             a = match_log.match(line)
             if a is not None:
