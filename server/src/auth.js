@@ -21,7 +21,7 @@ db.on('error', function(){
 });
 // 5. 연결 성공
 db.once('open', function() {
-  console.log('Connected!');
+  console.log('MongoDB for Auth is connected');
 });
 const userFind = mongoose.model('users', usersSchema);
 

@@ -1,8 +1,10 @@
 import RestApiServer from './RestApiServer.js';
 import EchoServer from './EchoServer.js';
+import AedesBroker from './AedesBroker.js';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import MqttClient from './AedesClient.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -10,6 +12,9 @@ const __dirname = path.dirname(__filename);
 const REST_API_PORT_HTTP = 3502;
 const REST_API_PORT_HTTPS = 3503;
 const ECHO_SERVER_PORT = 3505;
+
+const USE_EXTERNAL_MQTT_BROKER = true;
+const EXTERNAL_MQTT_BROKER_URL = 'ws://3.34.7.143:8888'
 
 function getTLSOption() {
   let options;
@@ -27,9 +32,15 @@ function getTLSOption() {
   }
   return options;
 }
-
-new RestApiServer(getTLSOption(), REST_API_PORT_HTTP, REST_API_PORT_HTTPS);
+let mqtt;
+if (USE_EXTERNAL_MQTT_BROKER) {
+  mqtt = new MqttClient(EXTERNAL_MQTT_BROKER_URL);
+} else {
+  mqtt = new AedesBroker();
+}
+new RestApiServer(getTLSOption(), REST_API_PORT_HTTP, REST_API_PORT_HTTPS, mqtt);
 new EchoServer(ECHO_SERVER_PORT);
+
 
 export { };
 

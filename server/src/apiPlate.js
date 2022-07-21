@@ -61,7 +61,7 @@ db.on('error', function(){
 });
 // 5. 연결 성공
 db.once('open', function() {
-  console.log('Connected!');
+  console.log('MongoDB for RestApi is connected');
 });
 const collections = mongoose.model('new_platenumber', platenumberSchema);
 const dist_levenshtein = config.max_dist_levenshtein;
