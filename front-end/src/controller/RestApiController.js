@@ -29,6 +29,8 @@ const readStorage = (key, defaultValue = undefined) => {
   return r
 }
 
+let log;
+
 function RestApiController({ showDetail }) {
   const [protocol, setProtocol] = useState(readStorage('restapi_protocol', 'https:'));
   const [host, setHost] = useState(readStorage('restapi_host', '10.58.2.34'));
@@ -44,6 +46,23 @@ function RestApiController({ showDetail }) {
   const { setResponse } = useContext(ModelContextStore);
 
   const [previousKeyword, setPreviousKeyword] = useState(undefined);
+
+  useEffect(() => {
+    log = '';
+  }, []);
+
+  const saveFile = async (blob) => {
+    const a = document.createElement('a');
+    a.download = 'my-file.txt';
+    a.href = URL.createObjectURL(blob);
+    a.addEventListener('click', (e) => {
+      setTimeout(() => URL.revokeObjectURL(a.href), 30 * 1000);
+    });
+    a.click();
+  };
+
+  const obj = { hello: 'world' };
+  const blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' });
 
   useEffect(() => {
     if (modelContext.command === undefined) {
@@ -93,6 +112,7 @@ function RestApiController({ showDetail }) {
 
     const s = 'GET request to ' + url + '  with param: ' + JSON.stringify(header);
     console.log('[LOG] REQUEST ' + Date.now() + ' ' + pnum);
+    log += '[LOG] REQUEST ' + Date.now() + ' ' + pnum + '\n';
     console.log(s);
     setMsgSent(s);
 
@@ -100,10 +120,11 @@ function RestApiController({ showDetail }) {
       .get(url, header)
       .then(response => {
         const plates = [];
-        for (let i=0; i<response.data.length; i+=1) {
+        for (let i = 0; i < response.data.length; i += 1) {
           plates.push(response.data[i].plate);
         }
         console.log('[LOG] RESPONSE ' + Date.now() + ' ' + plates.join(' '));
+        log += '[LOG] RESPONSE ' + Date.now() + ' ' + plates.join(' ') + '\n';
         console.log('response.data', response.data, url, header);
         setOngoing(false);
         response.data && setPlatesFound(response.data);
@@ -239,6 +260,10 @@ function RestApiController({ showDetail }) {
                 </InputGroup>
                 <Button color="primary" onClick={() => saveConnectionSetting()}>SAVE</Button>
                 <p>You MUST refresh the browser to apply changes after SAVE.</p>
+                <Button color="danger" onClick={() => {
+                  const blob2 = new Blob([log], { type: 'text/plain' });
+                  saveFile(blob2);
+                }}>Save LOG</Button>
               </AccordionBody>
             </AccordionItem>
           </UncontrolledAccordion>
